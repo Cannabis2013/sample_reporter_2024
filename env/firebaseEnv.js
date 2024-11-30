@@ -1,0 +1,6 @@
+export const firebaseApiKey = "AIzaSyAArLQ5T06MjjSzZXjeDp_FpwXCIJLdenM"
+export const firebaseAuthDomain = "mynotebook-6e40c.firebaseapp.com"
+export const firebasePID = "mynotebook-6e40c"
+export const firebaseBucket = "gs://mynotebook-6e40c.appspot.com"
+export const firebaseMsgId = "874195159834"
+export const firebaseAppId = "1:874195159834:web:3d9affc4b36f2aa434faa3"
