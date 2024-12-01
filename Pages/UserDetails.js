@@ -1,6 +1,6 @@
 import { Button, StyleSheet, Text, View } from "react-native";
 import { userInfo, signOut } from "../Services/Auth/notesAuth";
-import { setNeedsFetching } from "../Services/Notes/NotesInterface";
+import { setNeedsFetching } from "../Services/Persistence/DataPersistenceInterface"
 
 function toDateString(epochAsString){
     const date = new Date(Number.parseInt(epochAsString))

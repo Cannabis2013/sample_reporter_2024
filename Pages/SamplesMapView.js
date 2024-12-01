@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native"
 import MapView from 'react-native-maps'
 import { useState, useCallback } from "react"
-import { getAllNotes, fetchNotes } from "../Services/Notes/NotesInterface"
+import { getAllNotes, fetchNotes } from "../Services/Persistence/DataPersistenceInterface"
 import IconButton from "../Components/Controls/IconButton"
 import { currentLocation } from '../Services/location/locations'
 import { useFocusEffect } from "@react-navigation/native"

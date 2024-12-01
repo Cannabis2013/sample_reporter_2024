@@ -1,5 +1,5 @@
 import {Button, StyleSheet, Text, View} from "react-native";
-import {removeNoteById} from "../Services/Notes/NotesInterface";
+import {removeNoteById} from "../Services/Persistence/DataPersistenceInterface"
 
 export default function DeleteSample({route,navigation}){
     const note = route.params.note

@@ -1,5 +1,5 @@
 //import * as LocalNotes from "./NotesJsonFileStorage"
-import * as FirebaseNotes from "./NotesGoogleFirebase"
+import * as FirebaseNotes from "./DataGoogleFirebase"
 
 const storageProvider = FirebaseNotes
 

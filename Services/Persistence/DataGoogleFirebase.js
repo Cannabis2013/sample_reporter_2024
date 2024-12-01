@@ -26,22 +26,16 @@ export async function all() {
 
 export async function removeById(id) {
     const colRef = collection(db, colletionName)
-    const docsRef = (await getDocs(colRef)).docs
-    const docRef = docsRef.find(doc => doc.id === id)
-    return await deleteDoc(docRef.ref)
-        .catch(err => {
-            console.log(err)
-            return false
-        })
+    const docsRef = await getDocs(colRef)
+    const docs = docsRef.docs
+    const doc = docs.find(doc => doc.id === id)
+    await deleteDoc(doc.ref)
+    return true
 }
 
 export async function save(dbObject) {
     dbObject.images = await uploadToStorage(dbObject.images)
     const colRef = collection(db, colletionName)
     await addDoc(colRef, dbObject)
-        .catch(err => {
-            console.log(err)
-            return false
-        })
     return true
 }

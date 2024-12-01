@@ -1,6 +1,6 @@
 import { Button, FlatList, StyleSheet, Text, View } from "react-native";
 import { useState,useCallback } from "react";
-import { getAllNotes, fetchNotes } from "../Services/Notes/NotesInterface";
+import { getAllNotes, fetchNotes } from "../Services/Persistence/DataPersistenceInterface"
 import { signOut } from "../Services/Auth/notesAuth";
 import { useFocusEffect } from "@react-navigation/native";
 import NoteItem from "../Components/NoteItems/NoteGestureItem"

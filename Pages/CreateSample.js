@@ -1,7 +1,7 @@
 import { Button, TextInput, View, StyleSheet } from "react-native";
 import { useState } from "react";
 import { launchCamera, pickImage } from "../Services/Camera/images";
-import { saveNote } from "../Services/Notes/NotesInterface";
+import { saveNote } from "../Services/Persistence/DataPersistenceInterface"
 import IconButton from "../Components/Controls/IconButton";
 import { currentLocation } from "../Services/location/locations";
 import SplashScreen from "../Screens/Splash"
