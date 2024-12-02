@@ -4,9 +4,10 @@ import { FlatList, StyleSheet, Text, View } from "react-native";
 import { reload } from "firebase/auth";
 
 export default function ImageGallary(props) {
-    const imageData = props.images ?? []
+    const imageData = props?.images ?? []
     const images = imageData.map(data => data.uri)
     const deleteHandler = props.onDelete
+
     function renderImage(item) {
         const image = item.item
         return (
@@ -26,7 +27,7 @@ export default function ImageGallary(props) {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container,props.style]}>
             <FlatList
                 style={styles.listView}
                 horizontal={true}
@@ -39,9 +40,7 @@ export default function ImageGallary(props) {
 const styles = StyleSheet.create({
     container: {
         height: 96,
-        width: "100%",
-        borderWidth: 1,
-        borderColor: "black"
+        width: "100%"
     },
     imageBlock: {
         flex: 1,

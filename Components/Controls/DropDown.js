@@ -7,6 +7,9 @@ export default function DropDown(props){
     const [value, setValue] = useState(null);
     const [isFocus, setIsFocus] = useState(false);
 
+    const placeholder = props.placeholder ?? "Select"
+    const dataValues = props.data ?? []
+
     return (
         <View style={styles.container}>
             <Dropdown
@@ -15,12 +18,12 @@ export default function DropDown(props){
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
                 iconStyle={styles.iconStyle}
-                data={props.data}
+                data={dataValues}
                 search
                 maxHeight={300}
                 labelField="label"
                 valueField="value"
-                placeholder={!isFocus ? 'Select item' : '...'}
+                placeholder={!isFocus ? placeholder : '...'}
                 searchPlaceholder="Search..."
                 value={value}
                 onFocus={() => setIsFocus(true)}
@@ -45,11 +48,11 @@ export default function DropDown(props){
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: 'white',
-        height: 96
+        backgroundColor: 'transparent'
     },
     dropdown: {
         height: 50,
+        backgroundColor: "white",
         borderColor: 'black',
         borderWidth: 2,
         borderRadius: 8,

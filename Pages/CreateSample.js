@@ -7,13 +7,14 @@ import SplashScreen from "../Screens/Splash"
 import ImageGallary from "../Components/Images/ImageGallary"
 import SampleTargetSelector from "../Components/Samples/SampleTargetSelector"
 import { userInfo } from "../Services/Auth/notesAuth";
+import DropDown from "../Components/Controls/DropDown";
 
 export default function CreateSample({ navigation }) {
     const [loading, setLoading] = useState(false)
     const [content, setContent] = useState("")
-    const [images,setImages] = useState([])
     const [stationId, setStationId] = useState("")
-
+    const [images, setImages] = useState([])
+    
     function createSample() {
         return {
             content: content,
@@ -34,24 +35,21 @@ export default function CreateSample({ navigation }) {
     }
 
     async function selectImage() {
-        const result = await pickImage()
+        const imagePath = await pickImage()
         setLoading(true)
-        if (result){
-            images.push({uri: result})
+        if (imagePath) {
+            images.push({ uri: imagePath })
             setImages(images)
         }
         setTimeout(() => {
             setLoading(false)
         }, 500);
     }
-
-    console.log(images)
-
     async function captureImage() {
         const imagePath = await launchCamera()
         setLoading(true)
-        if (imagePath){
-            images.push({uri: imagePath})
+        if (imagePath) {
+            images.push({ uri: imagePath })
             setImages(images)
         }
         setTimeout(() => {
@@ -71,7 +69,7 @@ export default function CreateSample({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <SampleTargetSelector onUpdateValue={updateCurrentId} />
+            <SampleTargetSelector containerStyle={styles.targetSelector} onUpdateValue={updateCurrentId} />
             <View style={styles.buttonGroup}>
                 <View style={styles.buttonGroup2}>
                     <IconButton width={37} uri={require("../assets/camera.png")} onPress={captureImage} />
@@ -80,7 +78,13 @@ export default function CreateSample({ navigation }) {
                 <Button title={"Gem"} onPress={handleSaveClicked}></Button>
             </View>
             <TextInput value={content} onChangeText={setContent} multiline editable style={styles.contentInput} placeholder={"Notes"} />
-            <ImageGallary images={images} />
+            <ImageGallary style={styles.gallary} images={images} />
+            <View style={styles.inputContainer}>
+                <TextInput style={styles.valueInput} placeholder="Enter value.."></TextInput>
+                <View style={styles.unitSelector}>
+                    <DropDown></DropDown>
+                </View>
+            </View>
         </View>
     )
 }
@@ -88,14 +92,16 @@ export default function CreateSample({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        rowGap: 8,
         backgroundColor: '#fff',
         padding: 12
     },
-    titleInput: {
-        width: "100%",
-        backgroundColor: "white",
-        fontSize: 24,
-        fontWeight: "bold"
+    gallary:  {
+        backgroundColor: "lightblue",
+        borderRadius: 8
+    },
+    targetSelector: {
+        marginBottom: 8
     },
     contentInput: {
         marginTop: 2,
@@ -103,14 +109,35 @@ const styles = StyleSheet.create({
         textAlignVertical: "top",
         backgroundColor: "white",
         flex: 1,
-        fontSize: 16
+        fontSize: 16,
+        backgroundColor: "lightblue",
+        padding: 16,
+        fontSize: 32
     },
     buttonGroup: {
         flexDirection: "row",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        borderRadius: 8,
+        backgroundColor: "lightblue",
+        padding:8
     },
     buttonGroup2: {
         flexDirection: "row",
         columnGap: 6
+    },
+    inputContainer: {
+        height: "min-content",
+        flexDirection: "row",
+        alignItems: "center",
+        padding: 8,
+        borderRadius: 8,
+        backgroundColor: "lightblue"
+    },
+    valueInput: {
+        flex: 1,
+        fontSize: 32
+    },
+    unitSelector: {
+        width: 128
     }
 })
