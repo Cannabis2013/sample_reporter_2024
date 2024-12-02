@@ -1,12 +1,6 @@
 import { getStorageReference } from "../../firebaseConfig";
 import { getDownloadURL, ref, uploadBytes } from "@firebase/storage";
-
-async function fetchBlob(uri) {
-    const res = await fetch(uri)
-    if (res.ok)
-        return res.blob()
-    return undefined
-};
+import { asBlob } from "./imageFetch";
 
 function handleError(error) {
     console.log(error)
@@ -46,7 +40,7 @@ export async function uploadToStorage(uris) {
     let imageRef
     for (let i = 0; i < uris.length; i++) {
         const uri = uris[i];
-        const blob = await fetchBlob(uri)
+        const blob = await asBlob(uri)
         imageRef = await upload(blob)
         imageRefs.push(imageRef)
     }

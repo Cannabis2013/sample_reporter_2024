@@ -1,38 +1,34 @@
 import { Button, TextInput, View, StyleSheet } from "react-native";
 import { useState } from "react";
-import { launchCamera, pickImage } from "../Services/Camera/images";
-import { saveNote } from "../Services/Persistence/DataPersistenceInterface"
+import { launchCamera, pickImage } from "../Services/Images/images";
+import { save } from "../Services/Persistence/DataPersistenceInterface"
 import IconButton from "../Components/Controls/IconButton";
-import { currentLocation } from "../Services/location/locations";
 import SplashScreen from "../Screens/Splash"
 import ImageGallary from "../Components/Images/ImageGallary"
-import SampleMapView from "./SampleMapView"
+import SampleTargetSelector from "../Components/Samples/SampleTargetSelector"
+import { userInfo } from "../Services/Auth/notesAuth";
 
-export default function CreateSample({ navigation, route }) {
-    const coords = route.params?.coords ?? undefined
+export default function CreateSample({ navigation }) {
     const [loading, setLoading] = useState(false)
-    const [title, setTitle] = useState("")
     const [content, setContent] = useState("")
-    const [showMap, setShowMap] = useState(false)
-    const [location, setLocation] = useState(coords)
-    const [images] = useState([])
+    const [images,setImages] = useState([])
+    const [stationId, setStationId] = useState("")
 
-    async function createSample() {
-        const noteLocation = location ?? await currentLocation()
+    function createSample() {
         return {
-            title: title,
             content: content,
-            latitude: noteLocation?.latitude ?? 0,
-            longitude: noteLocation?.longitude ?? 0,
             images,
-            userId : userInfo().uid
+            userId: userInfo().uid,
+            stationRef: stationId
         }
     }
 
     async function handleSaveClicked() {
+        if (stationId === "")
+            return
         setLoading(true)
-        const notesObject = await createSample()
-        if (await saveNote(notesObject))
+        const notesObject = createSample()
+        if (await save(notesObject))
             navigation.goBack()
         setLoading(false)
     }
@@ -40,34 +36,31 @@ export default function CreateSample({ navigation, route }) {
     async function selectImage() {
         const result = await pickImage()
         setLoading(true)
-        if (result)
-            images.push(result)
-        setLoading(false)
+        if (result){
+            images.push({uri: result})
+            setImages(images)
+        }
+        setTimeout(() => {
+            setLoading(false)
+        }, 500);
     }
 
-    function handleMapPress(e) {
-        setLocation(e.nativeEvent.coordinate)
-        setShowMap(false)
-    }
+    console.log(images)
 
     async function captureImage() {
-        const result = await launchCamera()
+        const imagePath = await launchCamera()
         setLoading(true)
-        if (result)
-            images.push(result)
-        setLoading(false)
+        if (imagePath){
+            images.push({uri: imagePath})
+            setImages(images)
+        }
+        setTimeout(() => {
+            setLoading(false)
+        }, 500);
     }
 
-    async function updateNoteLocation() {
-        setLoading(true)
-        const location = await currentLocation()
-        if (location)
-            setLocation(location)
-        setLoading(false)
-    }
-
-    async function navigateToMapView() {
-        setShowMap(true)
+    function updateCurrentId(id) {
+        setStationId(id)
     }
 
     if (loading) {
@@ -76,28 +69,17 @@ export default function CreateSample({ navigation, route }) {
         )
     }
 
-    if (showMap) {
-        return (
-            <SampleMapView
-                onLongPress={handleMapPress} nodeTitle={title}
-                nodeContent={content} nodeLocation={location}
-                onClose={() => setShowMap(false)} />
-        )
-    }
-
     return (
         <View style={styles.container}>
+            <SampleTargetSelector onUpdateValue={updateCurrentId} />
             <View style={styles.buttonGroup}>
                 <View style={styles.buttonGroup2}>
                     <IconButton width={37} uri={require("../assets/camera.png")} onPress={captureImage} />
                     <IconButton width={37} uri={require("../assets/gallary.png")} onPress={selectImage} />
-                    <IconButton width={20} uri={require("../assets/location.png")} onPress={updateNoteLocation} />
-                    <IconButton width={30} uri={require("../assets/map.png")} onPress={navigateToMapView} />
                 </View>
                 <Button title={"Gem"} onPress={handleSaveClicked}></Button>
             </View>
-            <TextInput value={title} onChangeText={setTitle} style={styles.titleInput} placeholder={"Title"} />
-            <TextInput value={content} onChangeText={setContent} multiline editable style={styles.contentInput} placeholder={"Content"} />
+            <TextInput value={content} onChangeText={setContent} multiline editable style={styles.contentInput} placeholder={"Notes"} />
             <ImageGallary images={images} />
         </View>
     )

@@ -1,8 +1,10 @@
 import { TouchableOpacity } from "react-native";
-import { FlatList, StyleSheet, Text, View, Image } from "react-native";
+import {Image} from "expo-image"
+import { FlatList, StyleSheet, Text, View } from "react-native";
+import { reload } from "firebase/auth";
 
 export default function ImageGallary(props) {
-    let imageData = props.images ?? []
+    const imageData = props.images ?? []
     const images = imageData.map(data => data.uri)
     const deleteHandler = props.onDelete
     function renderImage(item) {
@@ -18,7 +20,7 @@ export default function ImageGallary(props) {
                     </TouchableOpacity>
                 </View> :
                 <View style={styles.imageBlock}>
-                    <Image style={styles.image} source={{ uri: image }} />
+                    <Image style={styles.image} source={{ uri: image,cache:reload }} />
                 </View>
         )
     }
@@ -37,7 +39,9 @@ export default function ImageGallary(props) {
 const styles = StyleSheet.create({
     container: {
         height: 96,
-        width: "100%"
+        width: "100%",
+        borderWidth: 1,
+        borderColor: "black"
     },
     imageBlock: {
         flex: 1,

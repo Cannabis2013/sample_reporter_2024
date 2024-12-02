@@ -1,14 +1,16 @@
 import { getFirebaseApp } from "../../firebaseConfig";
 import { addDoc, collection, deleteDoc, getDocs, getFirestore, query, where } from "@firebase/firestore/lite";
-import { uploadToStorage } from "../Camera/imageBlob";
+import { uploadToStorage } from "../Images/imageStorage";
 import { userInfo } from "../Auth/notesAuth"
 
 const app = getFirebaseApp()
 const db = getFirestore(app)
 
-const colletionName = 'UserNotes'
+const colletionName = 'Samples'
 
-export const clear = async () => true
+export async function clear() {
+    return true
+}
 
 export async function all() {
     const user = userInfo()
@@ -30,7 +32,6 @@ export async function removeById(id) {
     const docs = docsRef.docs
     const doc = docs.find(doc => doc.id === id)
     await deleteDoc(doc.ref)
-    return true
 }
 
 export async function save(dbObject) {

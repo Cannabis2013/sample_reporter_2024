@@ -1,8 +1,8 @@
 {
   "expo": {
     "newArchEnabled": true,
-    "name": "MyNotebook",
-    "slug": "MyNotebook", 
+    "name": "SampleReporter2024",
+    "slug": "SampleReporter2024", 
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

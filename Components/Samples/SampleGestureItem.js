@@ -1,9 +1,10 @@
 import { Animated, Button, StyleSheet, Text, View, PanResponder, Dimensions } from "react-native";
 import React, { useRef, useState } from "react";
 
-export default function NoteItem({ item, clickHandler, deleteHandler }) {
+export default function SampleItem(props) {
     const [x, setX] = useState(-125)
     const dx = useRef(0)
+    const item = useRef(props.item)
 
     function handleMove(event, gestureState) {
         dx.current = gestureState.dx - 125
@@ -26,13 +27,16 @@ export default function NoteItem({ item, clickHandler, deleteHandler }) {
         }),
     ).current;
 
-    function formatTitle(title) {
-        const maxLength = 15
-        if (title.length > maxLength) {
-            const cropped = title.substring(0, maxLength)
-            return cropped + ".."
-        }
-        return title
+    function formatTitle() {
+        return "Sample"
+    }
+
+    function deleteHandler(){
+        props.navigator.navigate("Delete note",{ note: item.current })
+    }
+
+    function detailsHandler(){
+        props.navigator.navigate("Sample details", {note: item.current})
     }
 
     return (
@@ -40,11 +44,11 @@ export default function NoteItem({ item, clickHandler, deleteHandler }) {
             {...panResponder.panHandlers}>
             <View style={styles.deleteContainer}>
                 <View style={styles.deleteButton}>
-                    <Button color={"red"} title={"Slet"} onPress={() => deleteHandler(item)} />
+                    <Button color={"red"} title={"Slet"} onPress={deleteHandler} />
                 </View>
             </View>
             <View style={styles.itemContainer}>
-                <Text style={styles.itemTitle} onPress={() => clickHandler(item)}>{formatTitle(item.title)}</Text>
+                <Text style={styles.itemTitle} onPress={detailsHandler}>{formatTitle()}</Text>
             </View>
         </Animated.View>
 

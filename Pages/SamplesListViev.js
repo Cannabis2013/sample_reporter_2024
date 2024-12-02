@@ -1,12 +1,12 @@
 import { Button, FlatList, StyleSheet, Text, View } from "react-native";
 import { useState,useCallback } from "react";
-import { getAllNotes, fetchNotes } from "../Services/Persistence/DataPersistenceInterface"
+import { getAll, fetch } from "../Services/Persistence/DataPersistenceInterface"
 import { signOut } from "../Services/Auth/notesAuth";
 import { useFocusEffect } from "@react-navigation/native";
-import NoteItem from "../Components/NoteItems/NoteGestureItem"
+import SampleItem from "../Components/Samples/SampleGestureItem"
 
 export default function SamplesListView({ navigation }) {
-    const notesData = getAllNotes()
+    const notesData = getAll()
     const [fetchRequired, setFetchRequired] = useState(true)
 
     async function handleFetchError(e) {
@@ -15,7 +15,7 @@ export default function SamplesListView({ navigation }) {
     }
 
     useFocusEffect(useCallback(() => {
-        fetchNotes().then(status => {
+        fetch().then(status => {
             if(status)
                 setFetchRequired(!fetchRequired)
         }).catch(handleFetchError)
@@ -28,7 +28,7 @@ export default function SamplesListView({ navigation }) {
             </View>
             <FlatList id={"samplesListView"} style={styles.listView}
                 data={notesData}
-                renderItem={({ item }) => <NoteItem item={item} clickHandler={item => navigation.navigate("Sample details", {note: item})} deleteHandler={item => redirectTo("Delete note",{ note: item })} ></NoteItem>} />
+                renderItem={({ item }) => <SampleItem item={item} navigator={navigation} />} />
         </View>
     )
 }
