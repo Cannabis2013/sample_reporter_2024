@@ -1,10 +1,11 @@
 import { Animated, Button, StyleSheet, Text, View, PanResponder, Dimensions } from "react-native";
 import React, { useRef, useState } from "react";
+import Targets from "../../Services/Targets/StationsInfo"
 
 export default function SampleItem(props) {
     const [x, setX] = useState(-125)
     const dx = useRef(0)
-    const item = useRef(props.item)
+    const sample = props.sample
 
     function handleMove(event, gestureState) {
         dx.current = gestureState.dx - 125
@@ -27,16 +28,20 @@ export default function SampleItem(props) {
         }),
     ).current;
 
-    function formatTitle() {
-        return "Sample"
+    function itemTitle() {
+        const target = Targets.targetByid(sample.stationRef)
+        const town = "Måløv"
+        const date = sample.date
+        const time = sample.time
+        return `${town}, ${date} ${time}`
     }
 
     function deleteHandler(){
-        props.navigator.navigate("Delete note",{ sample: item.current })
+        props.navigator.navigate("Delete note",{ sample: sample })
     }
 
     function detailsHandler(){
-        props.navigator.navigate("Sample details", {sample: item.current})
+        props.navigator.navigate("Sample details", {sample: sample})
     }
 
     return (
@@ -48,7 +53,7 @@ export default function SampleItem(props) {
                 </View>
             </View>
             <View style={styles.itemContainer}>
-                <Text style={styles.itemTitle} onPress={detailsHandler}>{formatTitle()}</Text>
+                <Text style={styles.itemTitle} onPress={detailsHandler}>{itemTitle()}</Text>
             </View>
         </Animated.View>
 
@@ -81,6 +86,6 @@ const styles = StyleSheet.create({
         borderRadius: 12
     },
     itemTitle: {
-        fontSize: 32
+        fontSize: 24
     }
 });

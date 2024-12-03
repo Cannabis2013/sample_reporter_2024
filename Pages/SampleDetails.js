@@ -7,8 +7,7 @@ export default function SampleDetails({route}){
     
     return (
         <View style={styles.container}>
-            <Text style={styles.noteTitle} >{sample.title}</Text>
-            <Text style={styles.noteContent}>{sample.content}</Text>
+            <Text style={styles.content}>{sample.content}</Text>
             <ImageGallary images={uris}/>
         </View>
     )
@@ -22,13 +21,9 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         padding: 12
     },
-    noteTitle: {
-        fontSize: 24,
-        borderBottomWidth: 1,
-        marginBottom: 6
-    },
-    noteContent: {
-        flex: 1
+    content: {
+        flex: 1,
+        fontSize: 32
     },
     imageLogo: {
         position: "absolute",

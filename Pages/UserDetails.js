@@ -1,6 +1,6 @@
 import { Button, StyleSheet, Text, View } from "react-native";
 import { userInfo, signOut } from "../Services/Auth/notesAuth";
-import { setNeedsFetching } from "../Services/Persistence/DataPersistenceInterface"
+import Samples from "../Services/Samples/Samples"
 
 function toDateString(epochAsString){
     const date = new Date(Number.parseInt(epochAsString))
@@ -8,7 +8,7 @@ function toDateString(epochAsString){
 }
 
 function handleSignOutClicked(){
-    setNeedsFetching(true)
+    Samples.needsFetching = true
     signOut()
 }
 

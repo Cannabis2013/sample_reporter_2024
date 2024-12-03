@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native"
 import MapView from 'react-native-maps'
 import { useState, useCallback } from "react"
-import { getAllNotes, fetchNotes } from "../Services/Persistence/DataPersistenceInterface"
+import Samples from "../Services/Samples/Samples"
 import IconButton from "../Components/Controls/IconButton"
 import { currentLocation } from '../Services/location/locations'
 import { useFocusEffect } from "@react-navigation/native"
@@ -25,7 +25,7 @@ export default function SamplesMapView({ navigation }) {
     }
 
     useFocusEffect(useCallback(() => {
-        fetchNotes().then(() => {
+        Samples.fetch().then(() => {
             if (!needsFetch)
                 return
             const noteMarkers = getAllNotes().map(noteData => MapMarker(noteData,

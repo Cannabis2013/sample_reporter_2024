@@ -15,7 +15,7 @@ const units = [
         value: "cyp"
     },
     {
-        label: "Eucalyptos",
+        label: "Eucalytter",
         value: "euc"
     }
 ]

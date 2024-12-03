@@ -2,27 +2,26 @@ import { Button, TextInput, View, StyleSheet } from "react-native";
 import { useState } from "react";
 import ImageControls from "../Components/Images/ImageControls"
 import { launchCamera, pickImage } from "../Services/Images/images";
-import { save } from "../Services/Persistence/DataPersistenceInterface"
 import SplashScreen from "../Screens/Splash"
 import ImageGallary from "../Components/Images/ImageGallary"
 import SampleTargetSelector from "../Components/Samples/SampleTargetSelector"
 import { userInfo } from "../Services/Auth/notesAuth";
 import UnitSelector from "../Components/Samples/UnitSelector";
-
+import Samples from "../Services/Samples/Samples"
 const tileColor = "rgba(0, 0, 100, 0.1)"
 
 export default function CreateSample({ navigation }) {
     const [loading, setLoading] = useState(false)
     const [content, setContent] = useState("")
     const [stationId, setStationId] = useState("")
-    const [sampleType,setSampleType] = useState("")
-    const [sampleValue,setSampleValue] = useState(0)
+    const [sampleType, setSampleType] = useState("")
+    const [sampleValue, setSampleValue] = useState(0)
     const [images, setImages] = useState([])
 
     function createSample() {
         return {
             content: content,
-            date: "",
+            date: new Date().getUTCDate(),
             images,
             userId: userInfo().uid,
             stationRef: stationId,
@@ -36,8 +35,7 @@ export default function CreateSample({ navigation }) {
         if (stationId === "")
             return
         setLoading(true)
-        const sample = createSample()
-        if (await save(sample))
+        if (await Samples.save(createSample()))
             navigation.goBack()
         setLoading(false)
     }
@@ -65,8 +63,8 @@ export default function CreateSample({ navigation }) {
             setLoading(false)
         }, 50);
     }
-    
-    function removeImage(image){
+
+    function removeImage(image) {
         const filtered = images.filter(img => img.uri != image)
         setImages(filtered)
     }
@@ -87,7 +85,7 @@ export default function CreateSample({ navigation }) {
                 <SampleTargetSelector style={styles.targetSelector} onUpdateValue={setStationId} />
             </View>
             <TextInput value={content} onChangeText={setContent} multiline editable style={styles.contentInput} placeholder={"Notes"} />
-            <ImageGallary style={styles.gallary} images={images} onDelete={removeImage}/>
+            <ImageGallary style={styles.gallary} images={images} onDelete={removeImage} />
             <UnitSelector style={styles.unitSelector} onValueChanged={setSampleValue} onTypeChanged={setSampleType}></UnitSelector>
         </View>
     )

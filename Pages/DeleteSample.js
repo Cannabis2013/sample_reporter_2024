@@ -1,29 +1,29 @@
-import {Button, StyleSheet, Text, View} from "react-native";
-import {remove} from "../Services/Persistence/DataPersistenceInterface"
+import { Button, StyleSheet, Text, View } from "react-native";
+import Samples from "../Services/Samples/Samples"
 import { useState } from "react";
 import SplashScreen from "../Screens/Splash"
 
-export default function DeleteSample({route,navigation}){
+export default function DeleteSample({ route, navigation }) {
     const [loading, setLoading] = useState(false)
     const sample = route.params.sample
-    
-    const deleteSample = async () => {
+
+    async function deleteSample() {
         setLoading(true)
-        await remove(sample)
+        await Samples.remove(sample)
         navigation.goBack()
     }
 
-    if(loading){
+    if (loading) {
         return (
-            <SplashScreen/>
+            <SplashScreen />
         )
     }
-    
+
     return (
         <View style={styles.container}>
             <Text style={styles.confirmText}>Er du sikker på du vil slette "{sample.title}"?</Text>
             <View style={styles.buttonWrapper}>
-                <Button color={"red"} title={"Slet"} onPress={deleteSample}/>
+                <Button color={"red"} title={"Slet"} onPress={deleteSample} />
             </View>
         </View>
     )

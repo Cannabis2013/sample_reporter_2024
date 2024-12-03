@@ -11,8 +11,8 @@ const targets = [
         id: uuid4()
     },
     {
-        name: "Herfølge BK",
-        town: "Hefølge",
+        name: "Brøndby Stadion",
+        town: "Brøndby",
         location: {
             lng: 23,
             lat: 23
@@ -39,6 +39,11 @@ const targets = [
     }
 ]
 
-export default function SampleTargets(){
-    return targets
+export default {
+    all(){
+        return targets
+    },
+    targetByid(id){
+        return targets.find(t => t.id == id)
+    }
 }
