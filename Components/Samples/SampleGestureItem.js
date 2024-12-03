@@ -32,11 +32,11 @@ export default function SampleItem(props) {
     }
 
     function deleteHandler(){
-        props.navigator.navigate("Delete note",{ note: item.current })
+        props.navigator.navigate("Delete note",{ sample: item.current })
     }
 
     function detailsHandler(){
-        props.navigator.navigate("Sample details", {note: item.current})
+        props.navigator.navigate("Sample details", {sample: item.current})
     }
 
     return (

@@ -4,8 +4,7 @@ import { FlatList, StyleSheet, Text, View } from "react-native";
 import { reload } from "firebase/auth";
 
 export default function ImageGallary(props) {
-    const imageData = props?.images ?? []
-    const images = imageData.map(data => data.uri)
+    const images = props?.images ?? []
     const deleteHandler = props.onDelete
 
     function renderImage(item) {
@@ -26,7 +25,7 @@ export default function ImageGallary(props) {
         )
     }
 
-    if(imageData.length == 0)
+    if(images.length == 0)
         return null;
 
     return (

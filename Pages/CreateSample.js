@@ -1,13 +1,12 @@
 import { Button, TextInput, View, StyleSheet } from "react-native";
 import { useState } from "react";
+import ImageControls from "../Components/Images/ImageControls"
 import { launchCamera, pickImage } from "../Services/Images/images";
 import { save } from "../Services/Persistence/DataPersistenceInterface"
-import IconButton from "../Components/Controls/IconButton";
 import SplashScreen from "../Screens/Splash"
 import ImageGallary from "../Components/Images/ImageGallary"
 import SampleTargetSelector from "../Components/Samples/SampleTargetSelector"
 import { userInfo } from "../Services/Auth/notesAuth";
-import DropDown from "../Components/Controls/DropDown";
 import UnitSelector from "../Components/Samples/UnitSelector";
 
 const tileColor = "rgba(0, 0, 100, 0.1)"
@@ -17,6 +16,7 @@ export default function CreateSample({ navigation }) {
     const [content, setContent] = useState("")
     const [stationId, setStationId] = useState("")
     const [sampleType,setSampleType] = useState("")
+    const [sampleValue,setSampleValue] = useState(0)
     const [images, setImages] = useState([])
 
     function createSample() {
@@ -25,6 +25,7 @@ export default function CreateSample({ navigation }) {
             images,
             userId: userInfo().uid,
             stationRef: stationId,
+            value: sampleValue,
             type: sampleType,
             unit: "ppm"
         }
@@ -34,8 +35,8 @@ export default function CreateSample({ navigation }) {
         if (stationId === "")
             return
         setLoading(true)
-        const notesObject = createSample()
-        if (await save(notesObject))
+        const sample = createSample()
+        if (await save(sample))
             navigation.goBack()
         setLoading(false)
     }
@@ -44,7 +45,7 @@ export default function CreateSample({ navigation }) {
         const imagePath = await pickImage()
         setLoading(true)
         if (imagePath) {
-            images.push({ uri: imagePath })
+            images.push(imagePath)
             setImages(images)
         }
         setTimeout(() => {
@@ -56,7 +57,7 @@ export default function CreateSample({ navigation }) {
         const imagePath = await launchCamera()
         setLoading(true)
         if (imagePath) {
-            images.push({ uri: imagePath })
+            images.push(imagePath)
             setImages(images)
         }
         setTimeout(() => {
@@ -79,17 +80,14 @@ export default function CreateSample({ navigation }) {
         <View style={styles.container}>
             <View style={styles.controlTile}>
                 <View style={styles.buttonGroup}>
-                    <View style={styles.buttonGroup2}>
-                        <IconButton width={37} uri={require("../assets/camera.png")} onPress={captureImage} />
-                        <IconButton width={37} uri={require("../assets/gallary.png")} onPress={selectImage} />
-                    </View>
+                    <ImageControls onCapture={captureImage} onPick={selectImage}></ImageControls>
                     <Button title={"Gem"} onPress={handleSaveClicked}></Button>
                 </View>
                 <SampleTargetSelector style={styles.targetSelector} onUpdateValue={setStationId} />
             </View>
             <TextInput value={content} onChangeText={setContent} multiline editable style={styles.contentInput} placeholder={"Notes"} />
             <ImageGallary style={styles.gallary} images={images} onDelete={removeImage}/>
-            <UnitSelector style={styles.unitSelector} onUpdateValue={setSampleType}></UnitSelector>
+            <UnitSelector style={styles.unitSelector} onValueChanged={setSampleValue} onTypeChanged={setSampleType}></UnitSelector>
         </View>
     )
 }
@@ -127,10 +125,6 @@ const styles = StyleSheet.create({
     buttonGroup: {
         flexDirection: "row",
         justifyContent: "space-between"
-    },
-    buttonGroup2: {
-        flexDirection: "row",
-        columnGap: 6
     },
     unitSelector: {
         backgroundColor: tileColor

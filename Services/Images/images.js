@@ -19,6 +19,5 @@ export async function launchCamera() {
     const result = await launchCameraAsync()
     if (result.canceled)
         return undefined
-    const localPath = result.assets[0].uri
-    return await asBase64(localPath)
+    return result.assets[0].uri
 }

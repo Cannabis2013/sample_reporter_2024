@@ -2,13 +2,14 @@ import {StyleSheet, View, Text} from "react-native";
 import ImageGallary from "../Components/Images/ImageGallary"
 
 export default function SampleDetails({route}){
-    const note = route.params.note
+    const sample = route.params.sample
+    const uris = sample.images.map(img => img.uri)
     
     return (
         <View style={styles.container}>
-            <Text style={styles.noteTitle} >{note.title}</Text>
-            <Text style={styles.noteContent}>{note.content}</Text>
-            <ImageGallary images={note.images}/>
+            <Text style={styles.noteTitle} >{sample.title}</Text>
+            <Text style={styles.noteContent}>{sample.content}</Text>
+            <ImageGallary images={uris}/>
         </View>
     )
 }

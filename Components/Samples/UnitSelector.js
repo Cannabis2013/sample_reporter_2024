@@ -21,11 +21,14 @@ const units = [
 ]
 
 export default function UnitSelector(props) {
+    const valueHandler = props.onValueChanged ?? function(item){}
+    const typeHandler = props.onTypeChanged ?? function(item){}
+
     return (
         <View style={[styles.container, props.style]}>
-            <TextInput style={styles.valueInput} placeholder="Enter value.."></TextInput>
+            <TextInput style={styles.valueInput} onChange={valueHandler} placeholder="Enter value.."></TextInput>
             <View style={styles.unitSelector}>
-                <DropDown data={units} onChange={props.onUpdateValue}></DropDown>
+                <DropDown data={units} onChange={typeHandler}></DropDown>
             </View>
         </View>
     )

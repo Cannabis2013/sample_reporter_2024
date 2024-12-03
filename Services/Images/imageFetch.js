@@ -21,7 +21,7 @@ async function toBase64(blob) {
 }
 
 export async function asBlob(uri) {
-    return fetchBlob(uri)
+    return await fetchBlob(uri)
 }
 
 export async function asBase64(uri) {

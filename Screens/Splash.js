@@ -4,7 +4,6 @@ import { View, StyleSheet, Text, ActivityIndicator } from "react-native";
 let fiveSecondsMark = false
 let eightSecondsMark = false
 
-
 export default function SplashScreen() {
     const [loadText, setLoadText] = useState("Loading... Please wait an hour.")
     function showFiveSecondsMessage(){
