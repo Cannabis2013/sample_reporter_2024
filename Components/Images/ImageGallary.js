@@ -15,8 +15,8 @@ export default function ImageGallary(props) {
                 <View style={styles.imageBlock}>
                     <Image style={styles.image} source={{ uri: image }} width={96} height={96} />
                     <TouchableOpacity
-                        style={styles.removeButton}>
-                        onPress={() => deleteHandler(image.id)}
+                        style={styles.removeButton}
+                        onPress={() => deleteHandler(image)}>
                         <Text style={styles.buttonText}>Remove</Text>
                     </TouchableOpacity>
                 </View> :
@@ -25,6 +25,9 @@ export default function ImageGallary(props) {
                 </View>
         )
     }
+
+    if(imageData.length == 0)
+        return null;
 
     return (
         <View style={[styles.container,props.style]}>
@@ -45,7 +48,8 @@ const styles = StyleSheet.create({
     imageBlock: {
         flex: 1,
         width: 96,
-        padding: 3
+        padding: 3,
+        position: "relative"
     },
     image: {
         width: "100%",
@@ -56,11 +60,13 @@ const styles = StyleSheet.create({
         columnGap: 2
     },
     removeButton: {
+        position: "absolute",
         color: "white",
         backgroundColor: "darkred",
         width: 64,
         borderRadius: 2,
-        alignSelf: "center"
+        alignSelf: "center",
+        zIndex: 99
     },
     buttonText: {
         color: "white",

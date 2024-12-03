@@ -17,7 +17,7 @@ export default function SampleTargetSelector(props){
     })
 
     return (
-        <View style={props.containerStyle}>
+        <View style={[props.containerStyle,props.style]}>
             <DropDown data={samples} onChange={props.onUpdateValue}></DropDown>
         </View>
     );
