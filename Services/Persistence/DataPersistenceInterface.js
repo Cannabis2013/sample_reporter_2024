@@ -27,14 +27,14 @@ export async function fetch(){
     return false
 }
 
-export async function remove (id){
-    const result =  await storageProvider.removeById(id)
+export async function remove(sample){
+    const result =  await storageProvider.removeObject(sample)
     fetchingRequired = true
     return result
 }
 
-export async function save (item) {
-    const result = await storageProvider.save(item)
+export async function save (dbObject) {
+    const result = await storageProvider.save(dbObject)
     fetchingRequired = true
     return result
 }

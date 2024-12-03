@@ -22,6 +22,7 @@ export default function CreateSample({ navigation }) {
     function createSample() {
         return {
             content: content,
+            date: "",
             images,
             userId: userInfo().uid,
             stationRef: stationId,

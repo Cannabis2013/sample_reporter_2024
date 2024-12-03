@@ -1,9 +1,15 @@
 import { getStorageReference } from "../../firebaseConfig";
-import { getDownloadURL, ref, uploadBytes } from "@firebase/storage";
+import { getDownloadURL, ref, uploadBytes, deleteObject } from "@firebase/storage";
 import { asBlob } from "./imageFetch";
 
+let errorMessage
+
+function getError(){
+    return errorMessage
+}
+
 function handleError(error) {
-    console.log(error)
+    errorMessage = error
     return undefined
 }
 
@@ -45,4 +51,15 @@ export async function uploadToStorage(uris) {
         imageRefs.push(imageRef)
     }
     return imageRefs
+}
+
+export async function removeFromStorage(imageIds){
+    let imageId
+    let ref
+    for (let i = 0; i < imageIds.length; i++) {
+        imageId = imageIds[i]
+        ref = getStorageRef(imageId);
+        await deleteObject(ref)
+    }
+    return true
 }

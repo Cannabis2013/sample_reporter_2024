@@ -1,6 +1,6 @@
 import { getFirebaseApp } from "../../firebaseConfig";
-import { addDoc, collection, deleteDoc, getDocs, getFirestore, query, where } from "@firebase/firestore/lite";
-import { uploadToStorage } from "../Images/imageStorage";
+import { addDoc, collection, deleteDoc, getDocs, getFirestore, query, where } from "@firebase/firestore";
+import { removeFromStorage, uploadToStorage } from "../Images/imageStorage";
 import { userInfo } from "../Auth/notesAuth"
 
 const app = getFirebaseApp()
@@ -19,18 +19,24 @@ export async function all() {
     const docsRef = await getDocs(q)
     const fetched = []
     docsRef.forEach(doc => {
-        const note = doc.data()
-        note.id = doc.id
-        fetched.push(note)
+        const sample = doc.data()
+        sample.id = doc.id
+        fetched.push(sample)
     })
     return fetched
 }
 
-export async function removeById(id) {
+async function getDocument(id) {
     const colRef = collection(db, colletionName)
     const docsRef = await getDocs(colRef)
     const docs = docsRef.docs
-    const doc = docs.find(doc => doc.id === id)
+    return docs.find(doc => doc.id === id)
+}
+
+export async function removeObject(sample) {
+    const uris = sample.images.map(img => img.imageId)
+    await removeFromStorage(uris)
+    const doc = await getDocument(sample.id)
     await deleteDoc(doc.ref)
 }
 
@@ -38,5 +44,6 @@ export async function save(dbObject) {
     dbObject.images = await uploadToStorage(dbObject.images)
     const colRef = collection(db, colletionName)
     await addDoc(colRef, dbObject)
+        .catch(err => console.log(err))
     return true
 }
