@@ -1,21 +1,33 @@
 import { StyleSheet, View, Text } from "react-native";
 import ImageGallary from "../Components/Images/ImageGallary"
 import locations from "../Services/Samples/SampleLocations"
+import SplashScreen from "../Screens/SplashScreen"
+import { useState } from "react";
 
 const tileColor = "rgba(0, 0, 100, 0.1)"
 
 export default function SampleDetails({ route }) {
+    const needsFetching = !locations.isFetched()
+    const [loading, setLoading] = useState(needsFetching)
     const sample = route.params.sample
     const uris = sample.images.map(img => img.uri)
     const location = locations.targetByid(sample.stationRef).name
 
+    if (loading) {
+        locations.fetchLocations()
+            .then(() => setLoading(false))
+        return (
+            <SplashScreen />
+        )
+    }
+
     return (
         <View style={styles.container}>
-            <View style={[styles.tile,styles.dateTile]}>
+            <View style={[styles.tile, styles.dateTile]}>
                 <Text style={styles.tileLabel}>Date, time and location</Text>
-                <Text style={{fontSize: 16}}>Date: {sample.date}</Text>
-                <Text style={{fontSize: 16}}>Time: {sample.time}</Text>
-                <Text style={{fontSize: 16}}>Location: {location}</Text>
+                <Text style={{ fontSize: 16 }}>Date: {sample.date}</Text>
+                <Text style={{ fontSize: 16 }}>Time: {sample.time}</Text>
+                <Text style={{ fontSize: 16 }}>Location: {location}</Text>
             </View>
             <View style={[styles.tile, styles.noteTile]}>
                 <Text style={styles.tileLabel}>Notes</Text>

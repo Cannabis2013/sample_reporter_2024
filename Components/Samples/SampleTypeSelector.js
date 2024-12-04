@@ -1,7 +1,7 @@
 import { View, StyleSheet, TextInput } from "react-native";
 import DropDown from "../Controls/DropDown";
 
-const units = [
+const sampleTypes = [
     {
         label: "CO2",
         value: "co2"
@@ -23,12 +23,13 @@ const units = [
 export default function UnitSelector(props) {
     const valueHandler = props.onValueChanged ?? function(item){}
     const typeHandler = props.onTypeChanged ?? function(item){}
+    const types = props.types ?? sampleTypes
 
     return (
         <View style={[styles.container, props.style]}>
             <TextInput style={styles.valueInput} onChangeText={valueHandler} placeholder="Enter value.."></TextInput>
             <View style={styles.unitSelector}>
-                <DropDown data={units} onChange={typeHandler}></DropDown>
+                <DropDown data={types} onChange={typeHandler}></DropDown>
             </View>
         </View>
     )

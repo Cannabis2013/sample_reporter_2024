@@ -4,12 +4,10 @@ import ImageControls from "../Components/Images/ImageControls"
 import { launchCamera, pickImage } from "../Services/Images/images";
 import SplashScreen from "../Screens/SplashScreen"
 import ImageGallary from "../Components/Images/ImageGallary"
-import SampleTargetSelector from "../Components/Samples/SampleTargetSelector"
+import LocationSelector from "../Components/Samples/SampleTargetSelector"
 import { userInfo } from "../Services/Auth/notesAuth";
-import UnitSelector from "../Components/Samples/UnitSelector";
+import TypeSelector from "../Components/Samples/SampleTypeSelector";
 import Samples from "../Services/Samples/Samples"
-
-const tileColor = "rgba(0, 0, 100, 0.1)"
 
 export default function CreateSample({ navigation }) {
     const [loading, setLoading] = useState(false)
@@ -83,14 +81,16 @@ export default function CreateSample({ navigation }) {
                     <ImageControls onCapture={captureImage} onPick={selectImage}></ImageControls>
                     <Button title={"Gem"} onPress={handleSaveClicked}></Button>
                 </View>
-                <SampleTargetSelector style={styles.targetSelector} onUpdateValue={setStationId} />
+                <LocationSelector currentValue={stationId} style={styles.targetSelector} onUpdateValue={setStationId} />
             </View>
             <TextInput value={content} onChangeText={setContent} multiline editable style={styles.contentInput} placeholder={"Notes"} />
             <ImageGallary style={styles.gallary} images={images} onDelete={removeImage} />
-            <UnitSelector style={styles.unitSelector} onValueChanged={setSampleValue} onTypeChanged={setSampleType}></UnitSelector>
+            <TypeSelector style={styles.unitSelector} onValueChanged={setSampleValue} onTypeChanged={setSampleType}></TypeSelector>
         </View>
     )
 }
+
+const tileColor = "rgba(0, 0, 100, 0.1)"
 
 const styles = StyleSheet.create({
     container: {

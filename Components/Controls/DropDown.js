@@ -4,9 +4,8 @@ import { StyleSheet, View } from 'react-native';
 import { useState } from 'react';
 
 export default function DropDown(props){
-    const [value, setValue] = useState(null);
+    const [value, setValue] = useState(props.value ?? null);
     const [isFocus, setIsFocus] = useState(false);
-
     const placeholder = props.placeholder ?? "Select"
     const dataValues = props.data ?? []
 
