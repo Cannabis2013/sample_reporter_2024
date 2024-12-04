@@ -12,9 +12,8 @@ import { initAuth, onSignedInChanged } from './Services/Auth/notesAuth';
 import UserPage from './Pages/UserDetails';
 import { useState } from 'react';
 import HomePage from './Pages/Home';
-import SampleMapView from './Pages/SampleMapView';
 import SamplesListView from "./Pages/SamplesListViev";
-import SamplesMapView from './Pages/SamplesMapView';
+import LocationsMapView from './Pages/LocationsMapView';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,14 +32,12 @@ export default function App() {
                 <Stack.Screen name="Notes Menu" component={HomePage} options={{
                     headerShown: false
                 }}/>
-                <Stack.Screen name="Samples List" component={SamplesListView} />
+                <Stack.Screen name="Samples list" component={SamplesListView} />
                 <Stack.Screen name="Create sample" component={CreateSample} />
-                <Stack.Screen name="Samples Map" component={SamplesMapView}/>
+                <Stack.Screen name="Locations map" component={LocationsMapView}/>
                 <Stack.Screen name="Sample details" component={SampleDetails} />
                 <Stack.Screen name="Delete note" component={DeleteSample} />
                 <Stack.Screen name="UserPage" component={UserPage} />
-                <Stack.Screen name='SampleCreateMap' component={SampleMapView}
-                    options={{ title: "Select location" }} />
             </>
         )
     }

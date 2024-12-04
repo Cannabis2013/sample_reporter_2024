@@ -5,7 +5,7 @@ export default function IconButton(props) {
     const iHeight = props.height ?? 30
     const pressHandler = props.onPress ?? function(){}
     return (
-        <View>
+        <View style={props.style}>
             <TouchableOpacity onPress={pressHandler} >
                 <Image style={{width: iWidth, height: iHeight}} source={props.uri}></Image>
             </TouchableOpacity>

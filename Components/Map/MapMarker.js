@@ -1,15 +1,16 @@
 import { Marker } from "react-native-maps";
-import { Text } from "react-native";
 
-let index = 0
-
-export default function MapMarker(item, pressHandler) {
+export default function MapMarker(props) {
+    const item = props.item
+    const coords = props.coordinates
     const coordinates = {
-        latitude: item.latitude,
-        longitude: item.longitude
+        latitude: coords.latitude,
+        longitude: coords.longitude
     }
 
+    const pressHandler = props.onPressed ?? function(item){}
+
     return (
-        <Marker key={index++} onPress={() => pressHandler(item)} coordinate={coordinates}/>
+        <Marker onPress={() => pressHandler(item)} coordinate={coordinates}/>
     )
 }

@@ -17,10 +17,10 @@ export default function HomePage({ navigation }) {
             <View style={styles.innerContainer}>
                 <View style={styles.collout}>
                     <IconTile title={"Create"} imageUrl={createLogoUri} pressHandler={() => navigateTo("Create sample")}/>
-                    <IconTile title={"Samples"} imageUrl={listLogoUri} pressHandler={() => navigateTo("Samples List")}/>
+                    <IconTile title={"Samples"} imageUrl={listLogoUri} pressHandler={() => navigateTo("Samples list")}/>
                 </View>
                 <View style={styles.collout}>
-                    <IconTile title={"Samples"} imageUrl={mapLogoUri} pressHandler={() => navigateTo("Samples map")}/>
+                    <IconTile title={"Samples"} imageUrl={mapLogoUri} pressHandler={() => navigateTo("Locations map")}/>
                     <IconTile title={"Log ud"} imageUrl={signOutLogoUri} pressHandler={signOut}/>
                 </View>
             </View>
