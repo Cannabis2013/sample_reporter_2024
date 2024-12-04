@@ -11,7 +11,7 @@ export default function SampleDetails({ route }) {
     const [loading, setLoading] = useState(needsFetching)
     const sample = route.params.sample
     const uris = sample.images.map(img => img.uri)
-    const location = locations.targetByid(sample.stationRef).name
+    const location = locations.targetByid(sample.location).name
 
     if (loading) {
         locations.fetchLocations()

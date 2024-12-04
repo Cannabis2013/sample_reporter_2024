@@ -8,14 +8,25 @@ import LocationSelector from "../Components/Samples/SampleTargetSelector"
 import { userInfo } from "../Services/Auth/notesAuth";
 import TypeSelector from "../Components/Samples/SampleTypeSelector";
 import Samples from "../Services/Samples/Samples"
+import locations from "../Services/Samples/SampleLocations"
 
 export default function CreateSample({ navigation }) {
-    const [loading, setLoading] = useState(false)
+    const locationNeedsFetch = !locations.isFetched()
+    const [loading, setLoading] = useState(locationNeedsFetch)
     const [content, setContent] = useState("")
-    const [stationId, setStationId] = useState("")
+    const [location, setLocation] = useState("")
     const [sampleType, setSampleType] = useState("")
     const [sampleValue, setSampleValue] = useState(0)
     const [images, setImages] = useState([])
+    const sampleLocations = locations.all()
+
+    if (locationNeedsFetch) {
+        locations.fetchLocations().then(() => setLoading(false))
+        setTimeout(() => {
+            if(loading)
+                setLoading(false)
+        }, 2000);
+    }
 
     function createSample() {
         return {
@@ -23,7 +34,7 @@ export default function CreateSample({ navigation }) {
             date: new Date().getUTCDate(),
             images,
             userId: userInfo().uid,
-            stationRef: stationId,
+            location: location.id,
             value: sampleValue,
             type: sampleType,
             unit: "ppm"
@@ -31,7 +42,7 @@ export default function CreateSample({ navigation }) {
     }
 
     async function handleSaveClicked() {
-        if (stationId === "")
+        if (location === "")
             return
         setLoading(true)
         if (await Samples.save(createSample()))
@@ -81,11 +92,11 @@ export default function CreateSample({ navigation }) {
                     <ImageControls onCapture={captureImage} onPick={selectImage}></ImageControls>
                     <Button title={"Gem"} onPress={handleSaveClicked}></Button>
                 </View>
-                <LocationSelector currentValue={stationId} style={styles.targetSelector} onUpdateValue={setStationId} />
+                <LocationSelector locations={sampleLocations} currentValue={location} style={styles.targetSelector} onUpdateValue={setLocation} />
             </View>
             <TextInput value={content} onChangeText={setContent} multiline editable style={styles.contentInput} placeholder={"Notes"} />
             <ImageGallary style={styles.gallary} images={images} onDelete={removeImage} />
-            <TypeSelector style={styles.unitSelector} onValueChanged={setSampleValue} onTypeChanged={setSampleType}></TypeSelector>
+            <TypeSelector style={styles.unitSelector} typeValue={sampleType} types={location.types} onValueChanged={setSampleValue} onTypeChanged={setSampleType}></TypeSelector>
         </View>
     )
 }

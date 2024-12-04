@@ -1,30 +1,31 @@
 
 // https://www.npmjs.com/package/react-native-element-dropdown
 
-import React, { useState, useCallback } from 'react';
-import Locations from "../../Services/Samples/SampleLocations"
+import React, { useState} from 'react';
 import DropDown from "../Controls/DropDown"
 import { View } from 'react-native';
 
-function toItem(t) {
+function toItem(loc) {
     return {
-        label: t.name,
-        value: t.id
+        label: loc.name,
+        value: loc.id
     }
 }
 
 export default function SampleTargetSelector(props) {
-    const locations = Locations.all().map(toItem)
-    const [change,updateChange] = useState(false)
-    const currentValue = props.currentValue ?? undefined
-    
-    if (!Locations.isFetched()) {
-        Locations.fetchLocations().then(() => updateChange(!change))
+    const locations = props.locations ?? []
+    const items = locations.map(toItem)
+    const currentValue = props.currentValue?.id ?? undefined
+
+    function handleChange(value){
+        const location = locations.find(loc => loc.id == value)
+        if(location && props.onUpdateValue)
+            props.onUpdateValue(location)
     }
 
     return (
         <View style={[props.containerStyle, props.style]}>
-            <DropDown value={currentValue} data={locations} onChange={props.onUpdateValue}></DropDown>
+            <DropDown value={currentValue} data={items} onChange={handleChange}></DropDown>
         </View>
     );
 };

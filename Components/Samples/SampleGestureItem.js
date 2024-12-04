@@ -32,8 +32,8 @@ export default function SampleItem(props) {
     async function updateTitle() {
         if(!locations.isFetched())
             await locations.fetchLocations()
-        const location = locations.targetByid(sample.stationRef)
-        setItemTitle(`${location.town}, ${sample.date} ${sample.time}`)
+        const location = locations.targetByid(sample.location)
+        setItemTitle(`${location.name}, ${sample.date} ${sample.time}`)
     }
 
     if(!itemTitle)
@@ -89,6 +89,6 @@ const styles = StyleSheet.create({
         borderRadius: 12
     },
     itemTitle: {
-        fontSize: 24
+        fontSize: 20
     }
 });
