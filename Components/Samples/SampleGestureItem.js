@@ -1,9 +1,10 @@
 import { Animated, Button, StyleSheet, Text, View, PanResponder, Dimensions } from "react-native";
 import React, { useRef, useState } from "react";
-import Targets from "../../Services/Targets/StationsInfo"
+import locations from "../../Services/Samples/SampleLocations"
 
 export default function SampleItem(props) {
     const [x, setX] = useState(-125)
+    const [itemTitle, setItemTitle] = useState(undefined)
     const dx = useRef(0)
     const sample = props.sample
 
@@ -28,14 +29,19 @@ export default function SampleItem(props) {
         }),
     ).current;
 
-    function itemTitle() {
-        const target = Targets.targetByid(sample.stationRef)
-        const town = "Måløv"
+    async function updateTitle() {
+        if(!locations.isFetched())
+            await locations.fetchLocations()
+        const location = locations.targetByid(sample.stationRef)
+        const town = location.town
         const date = sample.date
         const time = sample.time
-        return `${town}, ${date} ${time}`
+        const title =  `${town}, ${date} ${time}`
+        setItemTitle(title)
     }
-
+    if(!itemTitle)
+        updateTitle()
+    
     function deleteHandler(){
         props.navigator.navigate("Delete note",{ sample: sample })
     }
@@ -53,7 +59,7 @@ export default function SampleItem(props) {
                 </View>
             </View>
             <View style={styles.itemContainer}>
-                <Text style={styles.itemTitle} onPress={detailsHandler}>{itemTitle()}</Text>
+                <Text style={styles.itemTitle} onPress={detailsHandler}>{itemTitle}</Text>
             </View>
         </Animated.View>
 

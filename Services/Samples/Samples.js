@@ -48,7 +48,6 @@ export default {
         dbObject.images = await uploadObjects(imageBlobs)
         dbObject.date = getCurrentDate()
         dbObject.time = getCurrentTime()
-        console.log(dbObject)
         return await PersistenceProvider.save(dbObject)
     }
 }
