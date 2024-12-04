@@ -33,12 +33,9 @@ export default function SampleItem(props) {
         if(!locations.isFetched())
             await locations.fetchLocations()
         const location = locations.targetByid(sample.stationRef)
-        const town = location.town
-        const date = sample.date
-        const time = sample.time
-        const title =  `${town}, ${date} ${time}`
-        setItemTitle(title)
+        setItemTitle(`${location.town}, ${sample.date} ${sample.time}`)
     }
+
     if(!itemTitle)
         updateTitle()
     
