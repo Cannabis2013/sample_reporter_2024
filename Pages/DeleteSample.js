@@ -1,7 +1,7 @@
 import { Button, StyleSheet, Text, View } from "react-native";
 import Samples from "../Services/Samples/Samples"
 import { useState } from "react";
-import SplashScreen from "../Screens/Splash"
+import SplashScreen from "../Screens/SplashScreen"
 
 export default function DeleteSample({ route, navigation }) {
     const [loading, setLoading] = useState(false)

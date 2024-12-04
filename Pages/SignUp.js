@@ -1,7 +1,7 @@
 import { StyleSheet, View, TextInput, Button, Text } from "react-native";
 import { signUp } from "../Services/Auth/notesAuth";
 import { useState } from "react";
-import SplashScreen from "../Screens/Splash"
+import SplashScreen from "../Screens/SplashScreen"
 
 export default function SignUpPage({ navigation }) {
     let email = ""

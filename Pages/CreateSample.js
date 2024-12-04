@@ -2,7 +2,7 @@ import { Button, TextInput, View, StyleSheet } from "react-native";
 import { useState } from "react";
 import ImageControls from "../Components/Images/ImageControls"
 import { launchCamera, pickImage } from "../Services/Images/images";
-import SplashScreen from "../Screens/Splash"
+import SplashScreen from "../Screens/SplashScreen"
 import ImageGallary from "../Components/Images/ImageGallary"
 import SampleTargetSelector from "../Components/Samples/SampleTargetSelector"
 import { userInfo } from "../Services/Auth/notesAuth";

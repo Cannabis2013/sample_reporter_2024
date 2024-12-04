@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, TextInput, Button } from "react-native";
 import { useState } from "react";
-import SplashScreen from "../Screens/Splash.js";
+import SplashScreen from "../Screens/SplashScreen.js";
 import {signIn } from "../Services/Auth/notesAuth.js";
 import {authUsername, authPassword} from "../env/authEnv.js"
 
