@@ -1,5 +1,6 @@
 import { getFirebaseApp } from "../../firebaseConfig";
 import { addDoc, collection, deleteDoc, getDocs, getFirestore, query, where } from "@firebase/firestore";
+import { signOut } from "../Auth/notesAuth";
 
 import { userInfo } from "../Auth/notesAuth"
 
@@ -19,7 +20,7 @@ export function getAll() {
     return data
 }
 
-async function fetched() {
+async function fetch() {
     const user = userInfo()
     const colRef = collection(db, collectionId)
     const q = query(colRef, where("userId", "==", user.uid))
@@ -33,9 +34,14 @@ async function fetched() {
     return fetched
 }
 
+async function handleFetchError(e) {
+    if (e.code == "permission-denied")
+        await signOut()
+}
+
 export async function fetchData() {
     if (fetchingRequired) {
-        data = await fetched()
+        data = await fetch().catch(handleFetchError)
         fetchingRequired = false
         return true
     }

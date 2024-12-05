@@ -1,7 +1,6 @@
 import { Button, FlatList, StyleSheet, Text, View } from "react-native";
 import { useState, useCallback } from "react";
 import Samples from "../Services/Samples/Samples"
-import { signOut } from "../Services/Auth/notesAuth";
 import { useFocusEffect } from "@react-navigation/native";
 import SampleItem from "../Components/Samples/SampleGestureItem"
 import sampleLocations from "../Services/Samples/SampleLocations"
@@ -12,18 +11,13 @@ export default function SamplesListView({ navigation }) {
     const needsFetching = !sampleLocations.isFetched() || Samples.needsFetching()
     const [loading, setLoading] = useState(needsFetching)
 
-    async function handleFetchError(e) {
-        if (e.code == "permission-denied")
-            await signOut()
-    }
-
     useFocusEffect(useCallback(() => {
         Samples.fetch().then(status => {
             if (status && !sampleLocations.isFetched())
                 sampleLocations.fetchLocations().then(() => setLoading(false))
             else if (status)
                 setLoading(false)
-        }).catch(handleFetchError)
+        })
     }))
 
     if (loading)
