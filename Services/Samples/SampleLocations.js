@@ -17,6 +17,7 @@ export default {
     async fetchLocations() {
         const colRef = collection(db, collectionId)
         const snapshots = await getDocs(colRef)
+        sampleLocations = []
         snapshots.forEach(doc => {
             const sampleLocation = doc.data()
             sampleLocation.id = doc.id
@@ -26,7 +27,6 @@ export default {
     },
     all() {
         return sampleLocations
-
     },
     targetByid(id) {
         return sampleLocations.find(location => location.id == id)

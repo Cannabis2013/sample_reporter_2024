@@ -20,12 +20,8 @@ export default function LocationsMapView({ navigation }) {
     const [mapCords, setMapCoords] = useState(initialCoords)
     const locs = locations.all()
 
-    if(needsFetching){
+    if(needsFetching)
         locations.fetchLocations().then(() => setLoading(false))
-        setTimeout(() => {
-            setLoading(false)
-        }, 2000);
-    }
 
     async function goToCurrentLocation() {
         const cPos = await currentLocation()
@@ -39,12 +35,8 @@ export default function LocationsMapView({ navigation }) {
         setMapCoords(coords)
     }
 
-    function mapMarkers(){
-        return locs.map(loc => {
-            return (
-                <MapMarker key={loc.id} item={loc} coordinates={loc.location}></MapMarker>
-            )
-        })
+    function toDetails(location) {
+        navigation.navigate("Location details", { location })
     }
 
     if(loading){
@@ -56,7 +48,7 @@ export default function LocationsMapView({ navigation }) {
     return (
         <View style={styles.container}>
             <MapView region={mapCords} style={styles.map}>
-                {mapMarkers()}
+                {locs.map(loc => (<MapMarker onPressed={toDetails} key={loc.id} item={loc} coordinates={loc.location}/>))}
             </MapView>
             <IconButton style={styles.posWrapper} width={64}
                 height={64}

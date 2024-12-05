@@ -16,8 +16,10 @@ export async function clear() {
     return true
 }
 
-export function getAll() {
-    return data
+export function getAll(predicate) {
+    if(!predicate)
+        return data
+    return data.filter(predicate)
 }
 
 async function fetch() {

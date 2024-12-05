@@ -5,11 +5,9 @@ export default function IconTile({ title, imageUrl, pressHandler }) {
     return (
         <View style={styles.tileContainer}>
             <TouchableOpacity onPress={pressHandler}>
-                <Text style={styles.tileTitle}>
-                    {title}
-                </Text>
+                <Text style={styles.tileTitle}>{title}</Text>
                 <View style={styles.tileIconWrapper}>
-                    <Image source={imageUrl ?? ""} style={styles.tileIcon}></Image>
+                    <Image source={imageUrl ?? ""} style={styles.tileIcon}/>
                 </View>
             </TouchableOpacity>
         </View>

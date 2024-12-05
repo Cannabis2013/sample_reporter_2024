@@ -1,5 +1,7 @@
 import { Marker } from "react-native-maps";
 
+const imageuri = "../../assets/eurofins.png"
+
 export default function MapMarker(props) {
     const item = props.item
     const coords = props.coordinates
@@ -11,8 +13,6 @@ export default function MapMarker(props) {
     const pressHandler = props.onPressed ?? function (item) { }
 
     return (
-        <Marker style={styles.marker} onPress={() => pressHandler(item)} coordinate={coordinates}>
-            
-        </Marker>
+        <Marker onPress={() => pressHandler(item)} image={require(imageuri)} coordinate={coordinates}/>
     )
 }

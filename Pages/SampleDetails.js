@@ -4,8 +4,6 @@ import locations from "../Services/Samples/SampleLocations"
 import SplashScreen from "../Screens/SplashScreen"
 import { useState } from "react";
 
-const tileColor = "rgba(0, 0, 100, 0.1)"
-
 export default function SampleDetails({ route }) {
     const needsFetching = !locations.isFetched()
     const [loading, setLoading] = useState(needsFetching)
@@ -34,6 +32,8 @@ export default function SampleDetails({ route }) {
         </View>
     )
 }
+
+const tileColor = "rgba(0, 0, 100, 0.1)"
 
 const styles = StyleSheet.create({
     container: {

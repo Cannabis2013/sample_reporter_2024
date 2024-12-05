@@ -3,6 +3,7 @@ import * as FirebaseNotes from "../Persistence/DbFirestore"
 import { uploadObjects, removeObjects } from "../Persistence/StorageFirebase";
 import { asBlob } from "../Images/imageFetch";
 import { getCurrentDate, getCurrentTime } from "../../Utils/date"
+
 const PersistenceProvider = FirebaseNotes
 
 function createPath() {
@@ -21,8 +22,8 @@ async function toStorageBlobs(data) {
 }
 
 export default {
-    needsFetching() {
-        return PersistenceProvider.fetchingRequired
+    isFetched() {
+        return !PersistenceProvider.fetchingRequired
     },
 
     setNeedsFetching(status) {
@@ -32,7 +33,9 @@ export default {
     getAll() {
         return PersistenceProvider.getAll()
     },
-
+    fromLocation(locationId){
+        return PersistenceProvider.getAll(item => item.location == locationId)
+    },
     async fetch() {
         return await PersistenceProvider.fetchData()
     },
