@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
         padding: 8,
         width: 128,
         height: 128,
-        backgroundColor: "rgba(0,0,180,0.3)"
+        backgroundColor: "rgba(75,102,180,.8)"
     },
     tileTitle: {
         color: "black",

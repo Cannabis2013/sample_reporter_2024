@@ -12,14 +12,11 @@ export default function SampleDetails({ route }) {
     const sample = route.params.sample
     const uris = sample.images.map(img => img.uri)
     const location = locations.targetByid(sample.location).name
+    
+    locations.fetchLocations().then(() => setLoading(false))
 
-    if (loading) {
-        locations.fetchLocations()
-            .then(() => setLoading(false))
-        return (
-            <SplashScreen />
-        )
-    }
+    if (loading)
+        return (<SplashScreen />)
 
     return (
         <View style={styles.container}>

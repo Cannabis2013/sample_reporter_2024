@@ -1,4 +1,4 @@
-import { Button, FlatList, StyleSheet, Text, View } from "react-native";
+import { Button, FlatList, StyleSheet, View } from "react-native";
 import { useState, useCallback } from "react";
 import Samples from "../Services/Samples/Samples"
 import { useFocusEffect } from "@react-navigation/native";

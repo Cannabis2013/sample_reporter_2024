@@ -79,11 +79,8 @@ export default function CreateSample({ navigation }) {
         setImages(filtered)
     }
 
-    if (loading) {
-        return (
-            <SplashScreen />
-        )
-    }
+    if (loading)
+        return (<SplashScreen />)
 
     return (
         <View style={styles.container}>
