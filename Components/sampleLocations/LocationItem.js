@@ -11,6 +11,10 @@ export default function LocationItem(props) {
         return `${name} (${town})`
     }
 
+    function toDetails() {
+        props.navigator.navigate("Location details", { location })
+    }
+
     function pressHandler() {
         if (props.onPressed)
             props.onPressed(location)
@@ -18,7 +22,7 @@ export default function LocationItem(props) {
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.touchable} onPress={pressHandler}>
+            <TouchableOpacity style={styles.touchable} onPress={toDetails}>
                 <Image style={styles.locLogo} source={require(imageUri)} />
                 <Text style={styles.locName}>{locationTitle()}</Text>
             </TouchableOpacity>

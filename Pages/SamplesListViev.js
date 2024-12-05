@@ -23,14 +23,16 @@ export default function SamplesListView({ navigation }) {
     if (loading)
         return (<SplashScreen />)
 
+    function toItem({item}){
+        return (<SampleItem sample={item} navigator={navigation} />)
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.buttonLayout}>
                 <Button title={"Create"} color={"green"} onPress={() => navigation.navigate("Create sample")} />
             </View>
-            <FlatList id={"samplesListView"} style={styles.listView}
-                data={samples}
-                renderItem={({ item }) => <SampleItem sample={item} navigator={navigation} />} />
+            <FlatList data={samples}renderItem={toItem} />
         </View>
     )
 }
@@ -44,9 +46,6 @@ const styles = StyleSheet.create({
     },
     buttonLayout: {
         width: "100%"
-    },
-    listView: {
-        width: "100%",
     },
     itemContainer: {
         flexDirection: "row",

@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import sampleLocations from "../Services/Samples/SampleLocations"
 import { useState } from "react";
 import SplashScreen from "../Screens/SplashScreen"
@@ -15,15 +15,13 @@ export default function LocationsListView({ navigation }) {
     if (loading)
         return (<SplashScreen />)
 
-    function toDetails(location) {
-        navigation.navigate("Location details", { location })
+    function toItem({item}){
+        return (<LocationItem key={item.id} location={item} navigator={navigation}/>)
     }
 
     return (
         <View style={styles.container}>
-            {locations.map(loc => (
-                <LocationItem key={loc.id} onPressed={toDetails} location={loc} />))
-            }
+            <FlatList data={locations} renderItem={toItem}/>
         </View>
     )
 }

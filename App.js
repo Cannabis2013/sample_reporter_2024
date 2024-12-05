@@ -35,7 +35,9 @@ export default function App() {
                     headerShown: false
                 }}/>
                 <Stack.Screen name="Samples list" component={SamplesListView} />
-                <Stack.Screen name="Locations list" component={LocationsListView} />
+                <Stack.Screen name="Locations list" component={LocationsListView} options={{
+                    headerTitle:"Locations"                    
+                }}/>
                 <Stack.Screen name="Locations map" component={LocationsMapView}/>
                 <Stack.Screen name="Location details" component={LocationDetails}/>
                 <Stack.Screen name="Create sample" component={CreateSample} />
