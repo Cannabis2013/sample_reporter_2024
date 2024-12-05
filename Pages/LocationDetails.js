@@ -1,4 +1,4 @@
-import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Button, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Samples from "../Services/Samples/Samples"
 import SplashScreen from "../Screens/SplashScreen"
 import { useState } from "react";
@@ -15,6 +15,16 @@ export default function LocationDetails({ route }) {
     if (loading)
         return (<SplashScreen />)
 
+    function toItem({ item }) {
+        return (
+            <View key={item.id} style={styles.sampleContainer}>
+                <TouchableOpacity style={styles.sampleMouseArea}>
+                    <Text style={styles.sampleText}>{`${item.date} - ${item.time}`}</Text>
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.tile}>
@@ -28,15 +38,9 @@ export default function LocationDetails({ route }) {
                 <Text style={styles.notes}>{location.notes}</Text>
             </View>
 
-            <View style={[styles.tile,styles.samplesTile]}>
+            <View style={[styles.tile, styles.samplesTile]}>
                 <Text style={styles.label}>Samples</Text>
-                {samples.map(sample => (
-                    <View key={sample.id} style={styles.sampleContainer}>
-                        <TouchableOpacity>
-                            <Text style={styles.sampleText}>{`${sample.date} - ${sample.time}`}</Text>
-                        </TouchableOpacity>
-                    </View>
-                ))}
+                <FlatList data={samples} renderItem={toItem}></FlatList>
             </View>
         </View>
     )
@@ -59,9 +63,11 @@ const styles = StyleSheet.create({
         flex: 1
     },
     sampleContainer: {
-        padding: 8,
         borderRadius: 8,
         backgroundColor: "beige",
+    },
+    sampleMouseArea: {
+        padding: 8,
         flexDirection: "row"
     },
     sampleText: {

@@ -8,10 +8,11 @@ import SplashScreen from "../Screens/SplashScreen"
 
 export default function SamplesListView({ navigation }) {
     const samples = Samples.getAll()
-    const needsFetching = !sampleLocations.isFetched() || !Samples.isFetched()
-    const [loading, setLoading] = useState(needsFetching)
+    const [loading, setLoading] = useState(false)
 
     useFocusEffect(useCallback(() => {
+        const needsFetching = !sampleLocations.isFetched() || !Samples.isFetched()
+        setLoading(needsFetching)
         Samples.fetch().then(status => {
             if (status && !sampleLocations.isFetched())
                 sampleLocations.fetchLocations().then(() => setLoading(false))
