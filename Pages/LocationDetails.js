@@ -1,16 +1,20 @@
 import { Button, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Samples from "../Services/Samples/Samples"
 import SplashScreen from "../Screens/SplashScreen"
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 
-export default function LocationDetails({ route }) {
+export default function LocationDetails({ navigation, route }) {
     const location = route.params.location
-    const needsFetch = !Samples.isFetched()
-    const [loading, setLoading] = useState(needsFetch)
+    const [loading, setLoading] = useState(false)
     const samples = Samples.fromLocation(location.id)
 
-    if (needsFetch)
-        Samples.fetch().then(() => setLoading(false))
+    useFocusEffect(useCallback(() => {
+        const needsFetch = !Samples.isFetched()
+        setLoading(needsFetch)
+        if (needsFetch)
+            Samples.fetch().then(() => setLoading(false))
+    }))
 
     if (loading)
         return (<SplashScreen />)
@@ -18,7 +22,7 @@ export default function LocationDetails({ route }) {
     function toItem({ item }) {
         return (
             <View key={item.id} style={styles.sampleContainer}>
-                <TouchableOpacity style={styles.sampleMouseArea}>
+                <TouchableOpacity onPress={() => navigation.navigate("Sample details", { sample: item })} style={styles.sampleMouseArea}>
                     <Text style={styles.sampleText}>{`${item.date} - ${item.time}`}</Text>
                 </TouchableOpacity>
             </View>
@@ -40,6 +44,7 @@ export default function LocationDetails({ route }) {
 
             <View style={[styles.tile, styles.samplesTile]}>
                 <Text style={styles.label}>Samples</Text>
+                <Button onPress={() => navigation.navigate("Create sample", { location })} title="+" color={"green"}></Button>
                 <FlatList data={samples} renderItem={toItem}></FlatList>
             </View>
         </View>

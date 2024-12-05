@@ -10,23 +10,18 @@ import TypeSelector from "../Components/Samples/SampleTypeSelector";
 import Samples from "../Services/Samples/Samples"
 import locations from "../Services/Samples/SampleLocations"
 
-export default function CreateSample({ navigation }) {
+export default function CreateSample({ navigation, route }) {
     const locationNeedsFetch = !locations.isFetched()
     const [loading, setLoading] = useState(locationNeedsFetch)
     const [content, setContent] = useState("")
-    const [location, setLocation] = useState("")
+    const [location, setLocation] = useState(route?.params?.location ?? "")
     const [sampleType, setSampleType] = useState("")
     const [sampleValue, setSampleValue] = useState(0)
     const [images, setImages] = useState([])
     const sampleLocations = locations.all()
 
-    if (locationNeedsFetch) {
+    if (locationNeedsFetch)
         locations.fetchLocations().then(() => setLoading(false))
-        setTimeout(() => {
-            if(loading)
-                setLoading(false)
-        }, 2000);
-    }
 
     function createSample() {
         return {
