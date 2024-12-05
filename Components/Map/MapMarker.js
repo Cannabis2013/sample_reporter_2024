@@ -8,9 +8,11 @@ export default function MapMarker(props) {
         longitude: coords.longitude
     }
 
-    const pressHandler = props.onPressed ?? function(item){}
+    const pressHandler = props.onPressed ?? function (item) { }
 
     return (
-        <Marker onPress={() => pressHandler(item)} coordinate={coordinates}/>
+        <Marker style={styles.marker} onPress={() => pressHandler(item)} coordinate={coordinates}>
+            
+        </Marker>
     )
 }

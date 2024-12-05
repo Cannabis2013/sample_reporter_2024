@@ -14,8 +14,6 @@ const initialCoords = {
     longitudeDelta: 0.75
 }
 
-let index = 0
-
 export default function LocationsMapView({ navigation }) {
     const needsFetching = !locations.isFetched()
     const [loading,setLoading] = useState(needsFetching)
@@ -44,7 +42,7 @@ export default function LocationsMapView({ navigation }) {
     function mapMarkers(){
         return locs.map(loc => {
             return (
-                <MapMarker key={index++} item={loc} coordinates={loc.location}></MapMarker>
+                <MapMarker key={loc.id} item={loc} coordinates={loc.location}></MapMarker>
             )
         })
     }
