@@ -4,7 +4,6 @@ import locations from "../../Services/Samples/SampleLocations"
 
 export default function SampleItem(props) {
     const [x, setX] = useState(-125)
-    const [itemTitle, setItemTitle] = useState(undefined)
     const dx = useRef(0)
     const sample = props.sample
 
@@ -29,15 +28,10 @@ export default function SampleItem(props) {
         }),
     ).current;
 
-    async function updateTitle() {
-        if(!locations.isFetched())
-            await locations.fetchLocations()
+    function itemTitle() {
         const location = locations.targetByid(sample.location)
-        setItemTitle(`${location.name}, ${sample.date} ${sample.time}`)
+        return `${location?.name ?? "Ukendt"}, ${sample.date} ${sample.time}`
     }
-
-    if(!itemTitle)
-        updateTitle()
     
     function deleteHandler(){
         props.navigator.navigate("Delete note",{ sample: sample })
@@ -56,7 +50,7 @@ export default function SampleItem(props) {
                 </View>
             </View>
             <View style={styles.itemContainer}>
-                <Text style={styles.itemTitle} onPress={detailsHandler}>{itemTitle}</Text>
+                <Text style={styles.itemTitle} onPress={detailsHandler}>{itemTitle()}</Text>
             </View>
         </Animated.View>
 

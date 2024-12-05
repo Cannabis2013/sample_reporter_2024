@@ -14,6 +14,7 @@ import { useState } from 'react';
 import HomePage from './Pages/Home';
 import SamplesListView from "./Pages/SamplesListViev";
 import LocationsMapView from './Pages/LocationsMapView';
+import LocationsListView from "./Pages/LocationsListView"
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +34,7 @@ export default function App() {
                     headerShown: false
                 }}/>
                 <Stack.Screen name="Samples list" component={SamplesListView} />
+                <Stack.Screen name="Locations list" component={LocationsListView} />
                 <Stack.Screen name="Create sample" component={CreateSample} />
                 <Stack.Screen name="Locations map" component={LocationsMapView}/>
                 <Stack.Screen name="Sample details" component={SampleDetails} />

@@ -1,13 +1,16 @@
 import { Button, FlatList, StyleSheet, Text, View } from "react-native";
-import { useState,useCallback } from "react";
+import { useState, useCallback } from "react";
 import Samples from "../Services/Samples/Samples"
 import { signOut } from "../Services/Auth/notesAuth";
 import { useFocusEffect } from "@react-navigation/native";
 import SampleItem from "../Components/Samples/SampleGestureItem"
+import sampleLocations from "../Services/Samples/SampleLocations"
+import SplashScreen from "../Screens/SplashScreen"
 
 export default function SamplesListView({ navigation }) {
     const samples = Samples.getAll()
-    const [fetchRequired, setFetchRequired] = useState(true)
+    const needsFetching = !sampleLocations.isFetched() || Samples.needsFetching()
+    const [loading, setLoading] = useState(needsFetching)
 
     async function handleFetchError(e) {
         if (e.code == "permission-denied")
@@ -16,10 +19,15 @@ export default function SamplesListView({ navigation }) {
 
     useFocusEffect(useCallback(() => {
         Samples.fetch().then(status => {
-            if(status)
-                setFetchRequired(!fetchRequired)
+            if (status && !sampleLocations.isFetched())
+                sampleLocations.fetchLocations().then(() => setLoading(false))
+            else if (status)
+                setLoading(false)
         }).catch(handleFetchError)
     }))
+
+    if (loading)
+        return (<SplashScreen />)
 
     return (
         <View style={styles.container}>

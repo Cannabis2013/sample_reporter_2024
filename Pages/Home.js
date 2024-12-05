@@ -15,6 +15,7 @@ export default function HomePage({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.innerContainer}>
+            <IconTile title={"Locations"} imageUrl={createLogoUri} pressHandler={() => navigateTo("Locations list")}/>
                 <View style={styles.collout}>
                     <IconTile title={"Create"} imageUrl={createLogoUri} pressHandler={() => navigateTo("Create sample")}/>
                     <IconTile title={"Samples"} imageUrl={listLogoUri} pressHandler={() => navigateTo("Samples list")}/>
