@@ -3,6 +3,7 @@ import Samples from "../Services/Samples/Samples"
 import SplashScreen from "../Screens/SplashScreen"
 import { useCallback, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
+import SampleItem from "../Components/Samples/SampleGestureItem"
 
 export default function LocationDetails({ navigation, route }) {
     const location = route.params.location
@@ -45,7 +46,7 @@ export default function LocationDetails({ navigation, route }) {
             <View style={[styles.tile, styles.samplesTile]}>
                 <Text style={styles.label}>Samples</Text>
                 <Button onPress={() => navigation.navigate("Create sample", { location })} title="+" color={"green"}></Button>
-                <FlatList data={samples} renderItem={toItem}></FlatList>
+                <FlatList data={samples} renderItem={({ item }) => <SampleItem navigator={navigation} sample={item} />} />
             </View>
         </View>
     )
