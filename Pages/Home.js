@@ -5,7 +5,6 @@ import IconTile from "../Components/Controls/IconTile";
 const listLogoUri = require("../assets/hamburger.png")
 const mapLogoUri = require("../assets/map-logo.png")
 const signOutLogoUri = require("../assets/signout.png")
-const createLogoUri = require("../assets/create-tile-logo.png")
 
 export default function HomePage({ navigation }) {
     function navigateTo(route) {
@@ -16,7 +15,7 @@ export default function HomePage({ navigation }) {
         <View style={styles.container}>
             <View style={styles.innerContainer}>
                 <View style={styles.collout}>
-                    <IconTile title={"Locations"} imageUrl={createLogoUri} pressHandler={() => navigateTo("Locations list")} />
+                    <IconTile title={"Locations"} imageUrl={listLogoUri} pressHandler={() => navigateTo("Locations list")} />
                     <IconTile title={"Locations"} imageUrl={mapLogoUri} pressHandler={() => navigateTo("Locations map")} />
                 </View>
                 <View style={styles.collout}>

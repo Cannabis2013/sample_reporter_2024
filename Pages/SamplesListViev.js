@@ -24,16 +24,12 @@ export default function SamplesListView({ navigation }) {
     if (loading)
         return (<SplashScreen />)
 
-    function toItem({item}){
-        return (<SampleItem sample={item} navigator={navigation} />)
-    }
-
     return (
         <View style={styles.container}>
             <View style={styles.buttonLayout}>
-                <Button title={"Create"} color={"green"} onPress={() => navigation.navigate("Create sample")} />
+                <Button title={"+"} color={"darkgreen"} onPress={() => navigation.navigate("Create sample")} />
             </View>
-            <FlatList data={samples}renderItem={toItem} />
+            <FlatList data={samples}renderItem={({item}) => <SampleItem sample={item} navigator={navigation} />} />
         </View>
     )
 }

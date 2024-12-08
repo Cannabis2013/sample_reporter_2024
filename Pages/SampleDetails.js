@@ -4,10 +4,13 @@ import locations from "../Services/Samples/SampleLocations"
 import SplashScreen from "../Screens/SplashScreen"
 import { useState } from "react";
 import { ScrollView } from "react-native";
-import { translateOne} from "../Services/Samples/sampleTypes"
+import { translateOne } from "../Services/Samples/sampleTypes"
 
-const clockLogoUri = require("../assets/clock.png")
+const dateTimeLogoUri = require("../assets/datetime.png")
+const locationLogoUri = require("../assets/map-logo.png")
+const notesLogoUri = require("../assets/notes-logo.png")
 const sampleLogoUri = require("../assets/sample-glass.png")
+const gallaryLogoUri = require("../assets/gallary2.png")
 
 export default function SampleDetails({ route }) {
     const needsFetching = !locations.isFetched()
@@ -25,25 +28,26 @@ export default function SampleDetails({ route }) {
         <View style={styles.container}>
             <ScrollView >
                 <View style={styles.tile}>
-                    <Image style={styles.tileLogo} source={clockLogoUri} />
-                    <Text style={{ fontSize: 24, fontWeight: "bold" }}>{`${sample.date} ${sample.time}`}</Text>
+                    <Image style={styles.tileLogo} source={dateTimeLogoUri} />
+                    <Text style={styles.tileContent}>{`${sample.date} ${sample.time}`}</Text>
                 </View>
                 <View style={[styles.tile, styles.dateTile]}>
-                    <Text style={styles.tileLabel}>Location</Text>
-                    <Text style={{ fontSize: 32, fontWeight: "bold" }}>{location}</Text>
+                    <Image style={styles.tileLogo} source={locationLogoUri} />
+                    <Text style={styles.tileContent}>{location}</Text>
                 </View>
                 <View style={[styles.tile, styles.noteTile]}>
-                    <Text style={styles.tileLabel}>Notes</Text>
+                    <Image style={styles.tileLogo} source={notesLogoUri} />
                     <Text style={styles.noteContent}>{sample.content}</Text>
                 </View>
                 <View style={[styles.tile, styles.valueTitle]}>
                     <Image style={styles.tileLogo} source={sampleLogoUri} />
-                    <Text style={styles.sampleValue}>{translateOne(sample.type)}</Text>
-                    <Text style={styles.sampleValue} >
+                    <Text style={styles.tileContent}>{translateOne(sample.type)}</Text>
+                    <Text style={styles.tileContent} >
                         {`${sample.value} ${sample.unit}`}
                     </Text>
                 </View>
                 <View style={styles.tile}>
+                    <Image style={styles.tileLogo} source={gallaryLogoUri} />
                     <ImageGallary images={uris} />
                 </View>
             </ScrollView>
@@ -62,6 +66,10 @@ const styles = StyleSheet.create({
     },
     dateTile: {
         height: 140
+    },
+    tileContent: {
+        fontSize: 32, 
+        textAlign: "center"
     },
     tile: {
         width: "100%",

@@ -1,31 +1,27 @@
-import { Button, TextInput, View, StyleSheet } from "react-native";
+import { Button, TextInput, View, StyleSheet, Text } from "react-native";
 import { useState } from "react";
 import ImageControls from "../Components/Images/ImageControls"
 import { launchCamera, pickImage } from "../Services/Images/images";
 import SplashScreen from "../Screens/SplashScreen"
 import ImageGallary from "../Components/Images/ImageGallary"
-import LocationSelector from "../Components/Samples/SampleTargetSelector"
 import { userInfo } from "../Services/Auth/notesAuth";
+import LocationSelector from "../Components/Samples/SampleLocationSelector"
 import TypeSelector from "../Components/Samples/SampleTypeSelector";
 import Samples from "../Services/Samples/Samples"
-import locations from "../Services/Samples/SampleLocations"
 
 export default function CreateSample({ navigation, route }) {
-    const locationNeedsFetch = !locations.isFetched()
-    const [loading, setLoading] = useState(locationNeedsFetch)
-    const [content, setContent] = useState("")
+    const [loading, setLoading] = useState(false)
+    const [note, setNote] = useState("")
     const [location, setLocation] = useState(route?.params?.location ?? "")
     const [sampleType, setSampleType] = useState("")
     const [sampleValue, setSampleValue] = useState(0)
     const [images, setImages] = useState([])
-    const sampleLocations = locations.all()
-
-    if (locationNeedsFetch)
-        locations.fetchLocations().then(() => setLoading(false))
+    const [count, setCount] = useState(0)
+    const limit = 250
 
     function createSample() {
         return {
-            content: content,
+            content: note,
             date: new Date().getUTCDate(),
             images,
             userId: userInfo().uid,
@@ -74,6 +70,13 @@ export default function CreateSample({ navigation, route }) {
         setImages(filtered)
     }
 
+    function updateNote(text){
+        if(text.length > limit)
+            return
+        setNote(text)
+        setCount(text.length)
+    }
+
     if (loading)
         return (<SplashScreen />)
 
@@ -84,9 +87,10 @@ export default function CreateSample({ navigation, route }) {
                     <ImageControls onCapture={captureImage} onPick={selectImage}></ImageControls>
                     <Button title={"Gem"} onPress={handleSaveClicked}></Button>
                 </View>
-                <LocationSelector locations={sampleLocations} currentValue={location} style={styles.targetSelector} onUpdateValue={setLocation} />
+                <LocationSelector currentValue={location} style={styles.targetSelector} onUpdateValue={setLocation} />
             </View>
-            <TextInput value={content} onChangeText={setContent} multiline editable style={styles.contentInput} placeholder={"Notes"} />
+            <Text style={styles.wordCount}>{`${count}/${limit}`}</Text>
+            <TextInput value={note} onChangeText={updateNote} multiline editable style={styles.note} placeholder={"Notes"} />
             <ImageGallary style={styles.gallary} images={images} onDelete={removeImage} />
             <TypeSelector style={styles.unitSelector} typeValue={sampleType} types={location.types} onValueChanged={setSampleValue} onTypeChanged={setSampleType}></TypeSelector>
         </View>
@@ -107,7 +111,10 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         padding: 8
     },
-    contentInput: {
+    wordCount: {
+        textAlign: "right"
+    },
+    note: {
         marginTop: 2,
         width: "100%",
         borderRadius: 8,

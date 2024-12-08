@@ -8,15 +8,15 @@ export default function SplashScreen() {
     const [loadText, setLoadText] = useState("Loading... Please wait an hour.")
     function showFiveSecondsMessage(){
         setTimeout(() => {
-            setLoadText("Don't worry. Just Putin fucking with our connection.")
             fiveSecondsMark = true
+            setLoadText("Don't worry. Just Putin fucking with our connection.")
         }, 5000);
     }
 
     function showEightSecondsMessage(){
         setTimeout(() => {
-            setLoadText("Ok. You might wan't to go get some tea or coffee!")
             eightSecondsMark = true
+            setLoadText("Ok. You might wan't to go get some tea or coffee!")
         }, 8000)
     }
     

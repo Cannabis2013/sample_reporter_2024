@@ -1,4 +1,4 @@
-import { StyleSheet, View, Image, Text } from "react-native"
+import { StyleSheet, View, Text } from "react-native"
 
 const logoUri = require("../assets/notes-clipart.png")
 
@@ -18,7 +18,6 @@ export default function StartPage({ navigation }) {
                     <Text onPress={navigateToSignIn} style={styles.link}>Sign in</Text>
                     <Text onPress={navigateToSignUp} style={styles.link}>Sign up</Text>
                 </View>
-                <Image style={styles.homeLogo} source={logoUri}></Image>
             </View>
         );
     }

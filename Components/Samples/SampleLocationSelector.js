@@ -4,24 +4,34 @@
 import React, { useState} from 'react';
 import DropDown from "../Controls/DropDown"
 import { View } from 'react-native';
+import SampleLocations from "../../Services/Samples/SampleLocations"
+import SplashScreen from '../../Screens/SplashScreen';
+
+function toItem(loc) {
+    return {
+        label: loc.name,
+        value: loc.id
+    }
+}
 
 export default function SampleTargetSelector(props) {
-    const locations = props.locations ?? []
+    const needsFetch = !SampleLocations.isFetched()
+    const [loading,setLoading] = useState(needsFetch)
+    const locations = SampleLocations.all()
     const items = locations.map(toItem)
     const currentValue = props.currentValue?.id ?? undefined
 
-    function toItem(loc) {
-        return {
-            label: loc.name,
-            value: loc.id
-        }
-    }
+    if(needsFetch)
+        SampleLocations.fetchLocations().then(() => setLoading(false))
 
     function handleChange(value){
         const location = locations.find(loc => loc.id == value)
         if(location && props.onUpdateValue)
             props.onUpdateValue(location)
     }
+
+    if(loading)
+        return (<SplashScreen/>)
 
     return (
         <View style={[props.containerStyle, props.style]}>
