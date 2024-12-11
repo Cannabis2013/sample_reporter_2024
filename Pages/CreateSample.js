@@ -22,7 +22,6 @@ export default function CreateSample({ navigation, route }) {
     function createSample() {
         return {
             content: note,
-            date: new Date().getUTCDate(),
             images,
             userId: userInfo().uid,
             location: location.id,

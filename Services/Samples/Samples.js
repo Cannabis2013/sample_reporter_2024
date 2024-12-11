@@ -12,13 +12,13 @@ function createPath() {
 }
 
 async function toStorageBlobs(data) {
-    let imageBlobs = []
+    let storageBlobs = []
     for (let i = 0; i < data.length; i++) {
         const blob = await asBlob(data[i])
-        const imageBlob = { data: blob, path: createPath() }
-        imageBlobs.push(imageBlob)
+        const storageBlob = { data: blob, path: createPath() }
+        storageBlobs.push(storageBlob)
     }
-    return imageBlobs
+    return storageBlobs
 }
 
 export default {

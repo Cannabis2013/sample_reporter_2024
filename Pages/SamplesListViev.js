@@ -26,7 +26,7 @@ export default function SamplesListView({ navigation }) {
 
     function itemTitle(item) {
         const location = sampleLocations.targetByid(item.location)
-        return `${location?.name ?? "Ukendt"}, ${item.date} ${item.time}`
+        return `${item.date} | ${location?.name ?? "Ukendt"}`
     }
 
     return (

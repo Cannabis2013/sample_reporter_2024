@@ -1,15 +1,16 @@
-export function getCurrentTime(){
-    const date = new Date()
-    const hours = date.getHours()
-    const minuttes = date.getMinutes()
-    const seconds = date.getSeconds()
-    return `${hours}:${minuttes}:${seconds}`
-}
+const date = new Date()
 
 export function getCurrentDate(){
-    const date = new Date()
+    const utcDay = date.getUTCDay()
     const year = date.getFullYear()
+    const day = utcDay < 10 ? `0${utcDay}` : utcDay
     const month = date.getMonth()
-    const day = date.getDay()
-    return `${year}-${month}-${day}`
+    return `${year}:${month}:${day}`
+}
+
+export function getCurrentTime(){
+    const hours = date.getUTCHours()
+    const minutes = date.getUTCMinutes()
+    const seconds = date.getUTCSeconds()
+    return `${hours}:${minutes}:${seconds}`
 }
