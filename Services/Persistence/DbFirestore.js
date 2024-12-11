@@ -7,11 +7,6 @@ import { userInfo } from "../Auth/notesAuth"
 const app = getFirebaseApp()
 const db = getFirestore(app)
 
-let data = []
-export let fetchingRequired = true
-
-const collectionId = 'Samples'
-
 export async function clear() {
     return true
 }
@@ -22,7 +17,12 @@ export function getAll(predicate) {
     return data.filter(predicate)
 }
 
-async function fetch() {
+async function handleFetchError(e) {
+    if (e.code == "permission-denied")
+        await signOut()
+}
+
+export async function fetchData(collectionId) {
     const user = userInfo()
     const colRef = collection(db, collectionId)
     const q = query(colRef, where("userId", "==", user.uid))
@@ -36,36 +36,20 @@ async function fetch() {
     return fetched
 }
 
-async function handleFetchError(e) {
-    if (e.code == "permission-denied")
-        await signOut()
-}
-
-export async function fetchData() {
-    if (fetchingRequired) {
-        data = await fetch().catch(handleFetchError)
-        fetchingRequired = false
-        return true
-    }
-    return false
-}
-
-async function getDocument(id) {
+async function getDocument(id,collectionId) {
     const colRef = collection(db, collectionId)
     const docsRef = await getDocs(colRef)
     const docs = docsRef.docs
     return docs.find(doc => doc.id === id)
 }
 
-export async function removeObject(sample) {
-    const doc = await getDocument(sample.id)
+export async function removeObject(sample,collectionId) {
+    const doc = await getDocument(sample.id,collectionId)
     await deleteDoc(doc.ref)
-    fetchingRequired = true
 }
 
-export async function save(dbObject) {
+export async function save(dbObject,collectionId) {
     const colRef = collection(db, collectionId)
     await addDoc(colRef, dbObject).catch(err => console.log(err))
-    fetchingRequired = true
     return true
 }

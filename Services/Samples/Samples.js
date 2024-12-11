@@ -1,57 +1,51 @@
 //import * as LocalNotes from "./NotesJsonFileStorage"
 import * as FirebaseNotes from "../Persistence/DbFirestore"
-import { uploadObjects, removeObjects } from "../Persistence/StorageFirebase";
-import { asBlob } from "../Images/imageFetch";
+import Storage from "../Persistence/StorageFirebase";
 import { getCurrentDate, getCurrentTime } from "../../Utils/date"
 
 const PersistenceProvider = FirebaseNotes
 
-function createPath() {
-    const imgName = "img-" + new Date().getTime();
-    return `images/${imgName}.jpg`
-}
-
-async function toStorageBlobs(data) {
-    let storageBlobs = []
-    for (let i = 0; i < data.length; i++) {
-        const blob = await asBlob(data[i])
-        const storageBlob = { data: blob, path: createPath() }
-        storageBlobs.push(storageBlob)
-    }
-    return storageBlobs
-}
+const collectionId = 'Samples'
+let samples = []
+let fetchingRequired = true
 
 export default {
     isFetched() {
-        return !PersistenceProvider.fetchingRequired
+        return !fetchingRequired
     },
 
     setNeedsFetching(status) {
-        PersistenceProvider.needsFetching = status
+        fetchingRequired = status
     },
-
     getAll() {
-        return PersistenceProvider.getAll()
+        return samples
     },
     fromLocation(locationId){
-        return PersistenceProvider.getAll(item => item.location == locationId)
+        return samples.filter(item => item.location == locationId)
     },
     async fetch() {
-        return await PersistenceProvider.fetchData()
+        if(fetchingRequired){
+            samples = await PersistenceProvider.fetchData('Samples')
+            fetchingRequired = false
+            return true
+        }
+        return false
     },
 
     async remove(dbObject) {
         const uris = dbObject.images.map(img => img.imageId)
-        await removeObjects(uris)
-        await PersistenceProvider.removeObject(dbObject)
+        await Storage.removeObjects(uris)
+        await PersistenceProvider.removeObject(dbObject,'Samples')
+        fetchingRequired = true
     },
 
     async save(dbObject) {
-        const imageBlobs = await toStorageBlobs(dbObject.images)
-        dbObject.images = await uploadObjects(imageBlobs)
+        dbObject.images = await Storage.uploadObjects(dbObject.images)
         dbObject.date = getCurrentDate()
         dbObject.time = getCurrentTime()
-        return await PersistenceProvider.save(dbObject)
+        const result = await PersistenceProvider.save(dbObject,'Samples')
+        fetchingRequired = true
+        return result
     }
 }
 

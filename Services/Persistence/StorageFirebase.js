@@ -1,7 +1,23 @@
 import { getStorageReference } from "../../firebaseConfig";
 import { getDownloadURL, ref, uploadBytes, deleteObject } from "@firebase/storage";
+import {asBlob} from "../../Services/Images/imageFetch"
 
 let errorMessage
+
+function createPath() {
+    const title = "img-" + new Date().getTime();
+    return `images/${title}.jpg`
+}
+
+async function toStorageBlobs(data) {
+    let storageBlobs = []
+    for (let i = 0; i < data.length; i++) {
+        const blob = await asBlob(data[i])
+        const storageBlob = { data: blob, path: createPath() }
+        storageBlobs.push(storageBlob)
+    }
+    return storageBlobs
+}
 
 function handleError(error) {
     errorMessage = error
@@ -34,23 +50,25 @@ async function upload(fileBlob, path) {
     return { imageId: path, uri: imageUri }
 }
 
-export async function uploadObjects(dataObjects) {
-    const objectRefs = []
-    let objectRef
-    for (let i = 0; i < dataObjects.length; i++) {
-        const object = dataObjects[i];
-        objectRef = await upload(object.data,object.path)
-        objectRefs.push(objectRef)
+export default {
+    async uploadObjects(dataObjects) {
+        const blobs = await toStorageBlobs(dataObjects)
+        const objectRefs = []
+        let objectRef
+        for (let i = 0; i < blobs.length; i++) {
+            const object = blobs[i];
+            objectRef = await upload(object.data,object.path)
+            objectRefs.push(objectRef)
+        }
+        return objectRefs
+    },
+    async removeObject(objectId) {
+        const ref = getStorageRef(objectId);
+        await deleteObject(ref)
+    },
+    async removeObjects(objectIds) {
+        for (let i = 0; i < objectIds.length; i++)
+            await removeObject(objectIds[i])
     }
-    return objectRefs
 }
 
-export async function removeObject(objectId) {
-    const ref = getStorageRef(objectId);
-    await deleteObject(ref)
-}
-
-export async function removeObjects(objectIds) {
-    for (let i = 0; i < objectIds.length; i++)
-        await removeObject(objectIds[i])
-}
