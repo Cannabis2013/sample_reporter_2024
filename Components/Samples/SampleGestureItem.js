@@ -2,6 +2,8 @@ import { Animated, Button, StyleSheet, Text, View, PanResponder, Dimensions } fr
 import React, { useRef, useState } from "react";
 import locations from "../../Services/Samples/SampleLocations"
 
+let t;
+
 export default function SampleItem(props) {
     const [x, setX] = useState(-125)
     const dx = useRef(0)
@@ -9,12 +11,17 @@ export default function SampleItem(props) {
 
     function handleMove(event, gestureState) {
         dx.current = gestureState.dx - 125
-        if (dx.current <= 0 && dx.current > -125)
+        if (dx.current > 0 && dx.current <= 0)
+            setX(dx.current)
+        else if(dx.current < 0 && dx.current > -250)
             setX(dx.current)
     }
 
     function handleRelease() {
-        if (dx.current >= -5)
+        t = dx.current + 125
+        if (t < -100)
+            setX(-250)
+        else if(t > 100)
             setX(0)
         else
             setX(-125)
@@ -40,12 +47,17 @@ export default function SampleItem(props) {
         <Animated.View style={{ flexDirection: "row", transform: [{ translateX: x }], }}
             {...panResponder.panHandlers}>
             <View style={styles.deleteContainer}>
-                <View style={styles.deleteButton}>
-                    <Button color={"red"} title={"Slet"} onPress={deleteHandler} />
+                <View style={styles.containerButton}>
+                    <Button color={"red"} title={"Remove"} onPress={deleteHandler} />
                 </View>
             </View>
             <View style={styles.itemContainer}>
                 <Text style={styles.itemData} onPress={detailsHandler}>{props.itemText(sample)}</Text>
+            </View>
+            <View style={styles.updateContainer}>
+                <View style={styles.containerButton}>
+                    <Button color={"blue"} title={"Update"} onPress={deleteHandler} />
+                </View>
             </View>
         </Animated.View>
 
@@ -69,9 +81,15 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: "red"
     },
-    deleteButton: {
+    updateContainer: {
+        width: 125,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "blue"
+    },
+    containerButton: {
         flex: 1,
-        width: 64,
+        width: 125,
         maxHeight: 32,
         overflow: "hidden",
         borderRadius: 12
