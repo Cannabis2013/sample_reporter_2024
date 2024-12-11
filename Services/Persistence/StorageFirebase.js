@@ -42,12 +42,12 @@ async function uploadFile(storageRef, file) {
     return snapShot
 }
 
-async function upload(fileBlob, path) {
-    const storageRef = getStorageRef(path)
+async function upload(object) {
+    const storageRef = getStorageRef(object.path)
     if (!storageRef)
         return undefined
-    const imageUri = await uploadFile(storageRef, fileBlob)
-    return { imageId: path, uri: imageUri }
+    const imageUri = await uploadFile(storageRef, object,data)
+    return { imageId: object.path, uri: imageUri }
 }
 
 export default {
@@ -57,7 +57,7 @@ export default {
         let objectRef
         for (let i = 0; i < blobs.length; i++) {
             const object = blobs[i];
-            objectRef = await upload(object.data,object.path)
+            objectRef = await upload(object)
             objectRefs.push(objectRef)
         }
         return objectRefs

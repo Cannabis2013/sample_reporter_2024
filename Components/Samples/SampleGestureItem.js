@@ -1,6 +1,5 @@
 import { Animated, Button, StyleSheet, Text, View, PanResponder, Dimensions } from "react-native";
 import React, { useRef, useState } from "react";
-import locations from "../../Services/Samples/SampleLocations"
 
 let t;
 
@@ -36,11 +35,15 @@ export default function SampleItem(props) {
     ).current;
 
     function deleteHandler(){
-        props.navigator.navigate("Delete note",{ sample: sample })
+        props.navigator.navigate("Delete sample",{ sample: sample })
     }
 
     function detailsHandler(){
         props.navigator.navigate("Sample details", {sample: sample})
+    }
+
+    function updateHandler(){
+        props.navigator.navigate("Update note",{ sample: sample })
     }
 
     return (
@@ -60,7 +63,6 @@ export default function SampleItem(props) {
                 </View>
             </View>
         </Animated.View>
-
     )
 }
 

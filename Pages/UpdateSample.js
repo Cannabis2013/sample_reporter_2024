@@ -1,10 +1,9 @@
 import { Button, TextInput, View, StyleSheet, Text } from "react-native";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import ImageControls from "../Components/Images/ImageControls"
 import { launchCamera, pickImage } from "../Services/Images/images";
 import SplashScreen from "../Screens/SplashScreen"
 import ImageGallary from "../Components/Images/ImageGallary"
-import { userInfo } from "../Services/Auth/notesAuth";
 import LocationSelector from "../Components/Samples/SampleLocationSelector"
 import TypeSelector from "../Components/Samples/SampleTypeSelector";
 import Samples from "../Services/Samples/Samples"
@@ -12,36 +11,18 @@ import Samples from "../Services/Samples/Samples"
 export default function UpdateSample({ navigation, route }) {
     const [loading, setLoading] = useState(false)
     const sample = route.params.sample
+    const [count, setCount] = useState(sample.note.length)
     const limit = 250
 
-    function createSample() {
-        return {
-            content: note,
-            images,
-            userId: userInfo().uid,
-            location: location.id,
-            value: sampleValue,
-            type: sampleType,
-            unit: "ppm"
-        }
-    }
-
-    async function handleSaveClicked() {
-        if (location === "")
-            return
-        setLoading(true)
-        if (await Samples.save(createSample()))
-            navigation.goBack()
-        setLoading(false)
+    async function handleUpdateSample() {
+        
     }
 
     async function selectImage() {
         const imagePath = await pickImage()
         setLoading(true)
-        if (imagePath) {
-            images.push(imagePath)
-            setImages(images)
-        }
+        if (imagePath)
+            sample.images.push(imagePath)
         setTimeout(() => {
             setLoading(false)
         }, 500);
@@ -50,24 +31,21 @@ export default function UpdateSample({ navigation, route }) {
     async function captureImage() {
         const imagePath = await launchCamera()
         setLoading(true)
-        if (imagePath) {
-            images.push(imagePath)
-            setImages(images)
-        }
+        if (imagePath)
+            sample.images.push(imagePath)
         setTimeout(() => {
             setLoading(false)
         }, 50);
     }
 
     function removeImage(image) {
-        const filtered = images.filter(img => img.uri != image)
-        setImages(filtered)
+        sample.images = sample.images.filter(img => img.uri != image)
     }
 
     function updateNote(text){
         if(text.length > limit)
             return
-        setNote(text)
+        sample.note = text
         setCount(text.length)
     }
 
@@ -79,7 +57,7 @@ export default function UpdateSample({ navigation, route }) {
             <View style={styles.controlTile}>
                 <View style={styles.buttonGroup}>
                     <ImageControls onCapture={captureImage} onPick={selectImage}></ImageControls>
-                    <Button title={"Gem"} onPress={handleSaveClicked}></Button>
+                    <Button title={"Gem"} onPress={handleUpdateSample}></Button>
                 </View>
                 <LocationSelector currentValue={location} style={styles.targetSelector} onUpdateValue={setLocation} />
             </View>

@@ -16,6 +16,7 @@ import SamplesListView from "./Pages/SamplesListViev";
 import LocationsMapView from './Pages/LocationsMapView';
 import LocationsListView from "./Pages/LocationsListView"
 import LocationDetails from "./Pages/LocationDetails"
+import UpdateSample from "./Pages/UpdateSample"
 
 const Stack = createNativeStackNavigator();
 
@@ -42,7 +43,8 @@ export default function App() {
                 <Stack.Screen name="Location details" component={LocationDetails}/>
                 <Stack.Screen name="Create sample" component={CreateSample} />
                 <Stack.Screen name="Sample details" component={SampleDetails} />
-                <Stack.Screen name="Delete note" component={DeleteSample} />
+                <Stack.Screen name="Delete sample" component={DeleteSample} />
+                <Stack.Screen name="Update sample" component={UpdateSample} />
                 <Stack.Screen name="UserPage" component={UserPage} />
             </>
         )

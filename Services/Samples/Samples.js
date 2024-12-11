@@ -13,7 +13,6 @@ export default {
     isFetched() {
         return !fetchingRequired
     },
-
     setNeedsFetching(status) {
         fetchingRequired = status
     },
@@ -25,27 +24,29 @@ export default {
     },
     async fetch() {
         if(fetchingRequired){
-            samples = await PersistenceProvider.fetchData('Samples')
+            samples = await PersistenceProvider.fetchData(collectionId)
             fetchingRequired = false
             return true
         }
         return false
     },
-
     async remove(dbObject) {
         const uris = dbObject.images.map(img => img.imageId)
         await Storage.removeObjects(uris)
-        await PersistenceProvider.removeObject(dbObject,'Samples')
+        await PersistenceProvider.removeObject(dbObject,collectionId)
         fetchingRequired = true
     },
-
     async save(dbObject) {
         dbObject.images = await Storage.uploadObjects(dbObject.images)
         dbObject.date = getCurrentDate()
         dbObject.time = getCurrentTime()
-        const result = await PersistenceProvider.save(dbObject,'Samples')
+        const result = await PersistenceProvider.save(dbObject,collectionId)
         fetchingRequired = true
         return result
+    },
+
+    async update(dbObject){
+        
     }
 }
 
