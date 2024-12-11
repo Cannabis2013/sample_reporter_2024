@@ -39,7 +39,6 @@ const styles = StyleSheet.create({
         height: "100%",
         alignItems: "center",
         backgroundColor: "beige",
-        borderBottomWidth: 1,
         paddingHorizontal: 8,
         columnGap: 8,
         flexDirection: "row"

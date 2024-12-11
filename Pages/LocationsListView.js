@@ -2,7 +2,7 @@ import { FlatList, StyleSheet, View } from "react-native";
 import sampleLocations from "../Services/Samples/SampleLocations"
 import { useState } from "react";
 import SplashScreen from "../Screens/SplashScreen"
-import LocationItem from "../Components/sampleLocations/LocationItem"
+import SampleLocationItem from "../Components/Samples/SampleLocationItem"
 
 export default function LocationsListView({ navigation }) {
     const needsFetch = !sampleLocations.isFetched()
@@ -15,19 +15,20 @@ export default function LocationsListView({ navigation }) {
     if (loading)
         return (<SplashScreen />)
 
-    function toItem({item}){
-        return (<LocationItem key={item.id} location={item} navigator={navigation}/>)
-    }
-
     return (
         <View style={styles.container}>
-            <FlatList data={locations} renderItem={toItem}/>
+            <FlatList
+                data={locations}
+                renderItem={({item}) => <SampleLocationItem key={item.id} location={item} navigator={navigation} />}
+                ItemSeparatorComponent={<View style={styles.listSeparator}></View>}
+            />
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
-
+    listSeparator: {
+        height: 1,
+        backgroundColor: "gray"
     }
 })

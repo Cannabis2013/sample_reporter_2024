@@ -24,12 +24,21 @@ export default function SamplesListView({ navigation }) {
     if (loading)
         return (<SplashScreen />)
 
+    function itemTitle(item) {
+        const location = sampleLocations.targetByid(item.location)
+        return `${location?.name ?? "Ukendt"}, ${item.date} ${item.time}`
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.buttonLayout}>
                 <Button title={"+"} color={"darkgreen"} onPress={() => navigation.navigate("Create sample")} />
             </View>
-            <FlatList data={samples}renderItem={({item}) => <SampleItem sample={item} navigator={navigation} />} />
+            <FlatList
+                data={samples}
+                renderItem={({ item }) => <SampleItem sample={item} itemText={itemTitle} navigator={navigation} />}
+                ItemSeparatorComponent={<View style={styles.listSeparator}></View>}
+            />
         </View>
     )
 }
@@ -43,6 +52,10 @@ const styles = StyleSheet.create({
     },
     buttonLayout: {
         width: "100%"
+    },
+    listSeparator: {
+        height: 1,
+        backgroundColor: "grey"
     },
     itemContainer: {
         flexDirection: "row",

@@ -28,11 +28,6 @@ export default function SampleItem(props) {
         }),
     ).current;
 
-    function itemTitle() {
-        const location = locations.targetByid(sample.location)
-        return `${location?.name ?? "Ukendt"}, ${sample.date} ${sample.time}`
-    }
-    
     function deleteHandler(){
         props.navigator.navigate("Delete note",{ sample: sample })
     }
@@ -50,7 +45,7 @@ export default function SampleItem(props) {
                 </View>
             </View>
             <View style={styles.itemContainer}>
-                <Text style={styles.itemTitle} onPress={detailsHandler}>{itemTitle()}</Text>
+                <Text style={styles.itemData} onPress={detailsHandler}>{props.itemText(sample)}</Text>
             </View>
         </Animated.View>
 
@@ -66,7 +61,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         padding: 6,
         backgroundColor: "beige",
-        borderBottomWidth: 1,
         width: sWidth
     },
     deleteContainer: {
@@ -82,7 +76,7 @@ const styles = StyleSheet.create({
         overflow: "hidden",
         borderRadius: 12
     },
-    itemTitle: {
+    itemData: {
         fontSize: 20
     }
 });

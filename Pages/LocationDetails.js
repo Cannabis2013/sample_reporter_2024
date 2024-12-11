@@ -20,14 +20,8 @@ export default function LocationDetails({ navigation, route }) {
     if (loading)
         return (<SplashScreen />)
 
-    function toItem({ item }) {
-        return (
-            <View key={item.id} style={styles.sampleContainer}>
-                <TouchableOpacity onPress={() => navigation.navigate("Sample details", { sample: item })} style={styles.sampleMouseArea}>
-                    <Text style={styles.sampleText}>{`${item.date} - ${item.time}`}</Text>
-                </TouchableOpacity>
-            </View>
-        )
+    function itemTitle(item) {
+        return `${item.date} ${item.time}`
     }
 
     return (
@@ -46,7 +40,7 @@ export default function LocationDetails({ navigation, route }) {
             <View style={[styles.tile, styles.samplesTile]}>
                 <Text style={styles.label}>Samples</Text>
                 <Button onPress={() => navigation.navigate("Create sample", { location })} title="+" color={"green"}></Button>
-                <FlatList data={samples} renderItem={({ item }) => <SampleItem navigator={navigation} sample={item} />} />
+                <FlatList data={samples} ItemSeparatorComponent={<View style={styles.listSeparator}/>} renderItem={({ item }) => <SampleItem itemText={itemTitle} navigator={navigation} sample={item} />} />
             </View>
         </View>
     )
@@ -64,6 +58,10 @@ const styles = StyleSheet.create({
         backgroundColor: tileColor,
         padding: 8,
         borderRadius: 8
+    },
+    listSeparator: {
+        height: 1,
+        backgroundColor: "grey"
     },
     samplesTile: {
         flex: 1
