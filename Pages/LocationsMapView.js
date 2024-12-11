@@ -3,8 +3,7 @@ import MapView from 'react-native-maps'
 import { useState } from "react"
 import IconButton from "../Components/Controls/IconButton"
 import { currentLocation } from '../Services/location/locations'
-import locations from "../Services/Samples/SampleLocations"
-import SplashScreen from "../Screens/SplashScreen"
+import Locations from "../Services/Samples/SampleLocations"
 import MapMarker from "../Components/Map/MapMarker"
 
 const initialCoords = {
@@ -15,13 +14,8 @@ const initialCoords = {
 }
 
 export default function LocationsMapView({ navigation }) {
-    const needsFetching = !locations.isFetched()
-    const [loading,setLoading] = useState(needsFetching)
     const [mapCords, setMapCoords] = useState(initialCoords)
-    const locs = locations.all()
-
-    if(needsFetching)
-        locations.fetchLocations().then(() => setLoading(false))
+    const locations = Locations.all()
 
     async function goToCurrentLocation() {
         const cPos = await currentLocation()
@@ -39,16 +33,10 @@ export default function LocationsMapView({ navigation }) {
         navigation.navigate("Location details", { location })
     }
 
-    if(loading){
-        return (
-            <SplashScreen/>
-        )
-    }
-
     return (
         <View style={styles.container}>
             <MapView region={mapCords} style={styles.map}>
-                {locs.map(loc => (<MapMarker onPressed={toDetails} key={loc.id} item={loc} coordinates={loc.location}/>))}
+                {locations.map(loc => (<MapMarker onPressed={toDetails} key={loc.id} item={loc} coordinates={loc.location}/>))}
             </MapView>
             <IconButton style={styles.posWrapper} width={64}
                 height={64}

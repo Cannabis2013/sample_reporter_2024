@@ -1,8 +1,6 @@
 import { StyleSheet, View, Text, Image } from "react-native";
 import ImageGallary from "../Components/Images/ImageGallary"
 import locations from "../Services/Samples/SampleLocations"
-import SplashScreen from "../Screens/SplashScreen"
-import { useState } from "react";
 import { ScrollView } from "react-native";
 import { translateOne } from "../Services/Samples/sampleTypes"
 
@@ -13,16 +11,9 @@ const sampleLogoUri = require("../assets/sample-glass.png")
 const gallaryLogoUri = require("../assets/gallary2.png")
 
 export default function SampleDetails({ route }) {
-    const needsFetching = !locations.isFetched()
-    const [loading, setLoading] = useState(needsFetching)
     const sample = route.params.sample
     const uris = sample.images.map(img => img.uri)
     const location = locations.targetByid(sample.location).name
-
-    locations.fetchLocations().then(() => setLoading(false))
-
-    if (loading)
-        return (<SplashScreen />)
 
     return (
         <View style={styles.container}>

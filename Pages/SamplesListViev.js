@@ -11,15 +11,8 @@ export default function SamplesListView({ navigation }) {
     const [loading, setLoading] = useState(false)
 
     useFocusEffect(useCallback(() => {
-        const needsFetching = !sampleLocations.isFetched() || !Samples.isFetched()
-        setLoading(needsFetching)
-        Samples.fetch().then(status => {
-            if (status && !sampleLocations.isFetched())
-                sampleLocations.fetchLocations().then(() => setLoading(false))
-            else if (status)
-                setLoading(false)
-        })
-    }))
+        setLoading(true)
+        Samples.fetch().then(() => setLoading(false))}))
 
     if (loading)
         return (<SplashScreen />)

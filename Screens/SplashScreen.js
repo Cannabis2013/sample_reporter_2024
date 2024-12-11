@@ -1,30 +1,38 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { View, StyleSheet, Text, ActivityIndicator } from "react-native";
 
-let fiveSecondsMark = false
-let eightSecondsMark = false
+const messages = [
+    "Loading... Please wait an hour.",
+    "Loading... Maybe two hours",
+    "Don't worry. Just Putin fucking with our connection.",
+    "Ok. You might wan't to go get some tea or coffee!",
+    "Are you running this app on a Nokia 3210 with Android running?"
+]
+
+let message
+let nextIndex
 
 export default function SplashScreen() {
-    const [loadText, setLoadText] = useState("Loading... Please wait an hour.")
-    function showFiveSecondsMessage(){
-        setTimeout(() => {
-            fiveSecondsMark = true
-            setLoadText("Don't worry. Just Putin fucking with our connection.")
-        }, 5000);
-    }
-
-    function showEightSecondsMessage(){
-        setTimeout(() => {
-            eightSecondsMark = true
-            setLoadText("Ok. You might wan't to go get some tea or coffee!")
-        }, 8000)
-    }
+    const index = useRef(0)
+    const [loadText, setLoadText] = useState(messages[0])
+    const rotating = useRef(false)
     
-    if (!fiveSecondsMark)
-        showFiveSecondsMessage()
+    function rotateMessages(){
+        if(!rotating.current)
+            return
+        setTimeout(() => {
+            nextIndex = index.current + 1
+            index.current =  nextIndex < messages.length ? nextIndex : 0
+            message = messages[index.current]
+            setLoadText(message)
+            rotateMessages()
+        }, 4000);
+    }
 
-    if(!eightSecondsMark)
-        showEightSecondsMessage()
+    if(!rotating.current){
+        rotating.current = true
+        rotateMessages()
+    }
 
     return (
         <View style={styles.container}>

@@ -22,7 +22,7 @@ export default function SampleTargetSelector(props) {
     const currentValue = props.currentValue?.id ?? undefined
 
     if(needsFetch)
-        SampleLocations.fetchLocations().then(() => setLoading(false))
+        SampleLocations.fetch().then(() => setLoading(false))
 
     function handleChange(value){
         const location = locations.find(loc => loc.id == value)

@@ -14,7 +14,7 @@ export default {
     isFetched(){
         return fetched
     },
-    async fetchLocations() {
+    async fetch() {
         const colRef = collection(db, collectionId)
         const snapshots = await getDocs(colRef)
         sampleLocations = []

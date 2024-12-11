@@ -1,6 +1,5 @@
 import * as ImagePicker from "expo-image-picker";
 import { launchCameraAsync } from "expo-image-picker";
-import { asBase64 } from "./imageFetch"
 
 export async function pickImage() {
     // No permissions request is necessary for launching the image library

@@ -1,5 +1,5 @@
 //import * as LocalNotes from "./NotesJsonFileStorage"
-import * as FirebaseNotes from "../Persistence/DbFirestore"
+import FirebaseNotes from "../Persistence/DbFirestore"
 import Storage from "../Persistence/StorageFirebase";
 import { getCurrentDate, getCurrentTime } from "../../Utils/date"
 
@@ -26,9 +26,7 @@ export default {
         if(fetchingRequired){
             samples = await PersistenceProvider.fetchData(collectionId)
             fetchingRequired = false
-            return true
         }
-        return false
     },
     async remove(dbObject) {
         const uris = dbObject.images.map(img => img.imageId)
@@ -44,7 +42,6 @@ export default {
         fetchingRequired = true
         return result
     },
-
     async update(dbObject){
         
     }

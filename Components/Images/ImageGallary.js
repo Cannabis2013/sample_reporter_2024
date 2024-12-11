@@ -20,7 +20,7 @@ export default function ImageGallary(props) {
                     </TouchableOpacity>
                 </View> :
                 <View style={styles.imageBlock}>
-                    <Image style={styles.image} source={{ uri: image,cache:reload }} />
+                    <Image style={styles.image} source={{ uri: image }} />
                 </View>
         )
     }
