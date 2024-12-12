@@ -29,18 +29,20 @@ export default function App() {
         setSignedIn(status)
     })
 
+    const headerOptions = {
+        headerTitle: ""
+    }
+
     function signedInBody() {
         return (
             <>
-                <Stack.Screen name="Notes Menu" component={HomePage} options={{
+                <Stack.Screen name="Home" component={HomePage} options={{
                     headerShown: false
                 }}/>
-                <Stack.Screen name="Samples list" component={SamplesListView} />
-                <Stack.Screen name="Locations list" component={LocationsListView} options={{
-                    headerTitle:"Locations"                    
-                }}/>
-                <Stack.Screen name="Locations map" component={LocationsMapView}/>
-                <Stack.Screen name="Location details" component={LocationDetails}/>
+                <Stack.Screen name="Samples list" component={SamplesListView} options={headerOptions}/>
+                <Stack.Screen name="Locations list" component={LocationsListView} options={headerOptions}/>
+                <Stack.Screen name="Locations map" component={LocationsMapView} options={headerOptions}/>
+                <Stack.Screen name="Location details" component={LocationDetails} options={headerOptions}/>
                 <Stack.Screen name="Create sample" component={CreateSample} />
                 <Stack.Screen name="Sample details" component={SampleDetails} />
                 <Stack.Screen name="Delete sample" component={DeleteSample} />
