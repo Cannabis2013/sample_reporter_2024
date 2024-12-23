@@ -5,7 +5,7 @@ import React, { useState} from 'react';
 import DropDown from "../Controls/DropDown"
 import { View } from 'react-native';
 import SampleLocations from "../../Services/Samples/SampleLocations"
-import SplashScreen from '../../Screens/SplashScreen';
+import LoadPage from "../../Pages/LoadPage"
 
 function toItem(loc) {
     return {
@@ -31,7 +31,7 @@ export default function SampleTargetSelector(props) {
     }
 
     if(loading)
-        return (<SplashScreen/>)
+        return (<LoadPage/>)
 
     return (
         <View style={[props.containerStyle, props.style]}>

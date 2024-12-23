@@ -2,11 +2,10 @@ import { Button, TextInput, View, StyleSheet, Text } from "react-native";
 import { useState, useRef } from "react";
 import ImageControls from "../Components/Images/ImageControls"
 import { launchCamera, pickImage } from "../Services/Images/images";
-import SplashScreen from "../Screens/SplashScreen"
+import LoadPage from "./LoadPage"
 import ImageGallary from "../Components/Images/ImageGallary"
 import LocationSelector from "../Components/Samples/SampleLocationSelector"
 import TypeSelector from "../Components/Samples/SampleTypeSelector";
-import Samples from "../Services/Samples/Samples"
 
 export default function UpdateSample({ navigation, route }) {
     const [loading, setLoading] = useState(false)
@@ -50,7 +49,7 @@ export default function UpdateSample({ navigation, route }) {
     }
 
     if (loading)
-        return (<SplashScreen />)
+        return (<LoadPage />)
 
     return (
         <View style={styles.container}>

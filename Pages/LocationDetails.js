@@ -1,6 +1,6 @@
 import { Button, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Samples from "../Services/Samples/Samples"
-import SplashScreen from "../Screens/SplashScreen"
+import LoadPage from "./LoadPage"
 import { useCallback, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import SampleItem from "../Components/Samples/SampleGestureItem"
@@ -18,7 +18,7 @@ export default function LocationDetails({ navigation, route }) {
     }))
 
     if (loading)
-        return (<SplashScreen />)
+        return (<LoadPage />)
 
     function itemTitle(item) {
         return `${item.date} ${item.time}`

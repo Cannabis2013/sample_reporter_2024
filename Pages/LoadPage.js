@@ -12,10 +12,11 @@ const messages = [
 let message
 let nextIndex
 
-export default function SplashScreen() {
+export default function LoadPage(props) {
     const index = useRef(0)
     const [loadText, setLoadText] = useState(messages[0])
     const rotating = useRef(false)
+    const loadTitle = props.title ? props.title : ""
     
     function rotateMessages(){
         if(!rotating.current)
@@ -36,6 +37,7 @@ export default function SplashScreen() {
 
     return (
         <View style={styles.container}>
+            <Text>{loadTitle}</Text>
             <Text style={styles.splashText}>{loadText}</Text>
             <ActivityIndicator size={"large"} />
         </View>

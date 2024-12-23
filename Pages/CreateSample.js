@@ -2,7 +2,7 @@ import { Button, TextInput, View, StyleSheet, Text } from "react-native";
 import { useState } from "react";
 import ImageControls from "../Components/Images/ImageControls"
 import { launchCamera, pickImage } from "../Services/Images/images";
-import SplashScreen from "../Screens/SplashScreen"
+import LoadPage from "./LoadPage"
 import ImageGallary from "../Components/Images/ImageGallary"
 import { userInfo } from "../Services/Auth/notesAuth";
 import LocationSelector from "../Components/Samples/SampleLocationSelector"
@@ -77,7 +77,7 @@ export default function CreateSample({ navigation, route }) {
     }
 
     if (loading)
-        return (<SplashScreen />)
+        return (<LoadPage />)
 
     return (
         <View style={styles.container}>

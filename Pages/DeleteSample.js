@@ -1,7 +1,7 @@
 import { Button, StyleSheet, Text, View } from "react-native";
 import Samples from "../Services/Samples/Samples"
 import { useState } from "react";
-import SplashScreen from "../Screens/SplashScreen"
+import LoadPage from "./LoadPage"
 
 export default function DeleteSample({ route, navigation }) {
     const [loading, setLoading] = useState(false)
@@ -15,7 +15,7 @@ export default function DeleteSample({ route, navigation }) {
 
     if (loading) {
         return (
-            <SplashScreen />
+            <LoadPage />
         )
     }
 

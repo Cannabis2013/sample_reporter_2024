@@ -2,7 +2,7 @@ import { StyleSheet, View } from "react-native";
 import { signOut } from "../Services/Auth/auth-firebase";
 import IconTile from "../Components/Controls/IconTile";
 import { useState } from "react";
-import SplashScreen from "../Screens/SplashScreen";
+import LoadPage from "./LoadPage";
 import Samples from "../Services/Samples/Samples"
 import Locations from "../Services/Samples/SampleLocations"
 
@@ -15,6 +15,8 @@ export default function HomePage({ navigation }) {
     const [loading, setLoading] = useState(true)
 
     function fetchData() {
+        if(!loading)
+            return
         Locations.fetch().then(() => {
             Samples.fetch().then(
                 () => setLoading(false)
@@ -22,9 +24,10 @@ export default function HomePage({ navigation }) {
         })
     }
 
+    fetchData()
+
     if (loading) {
-        fetchData()
-        return (<SplashScreen />)
+        return (<LoadPage title="Loading data" />)
     }
 
     function handleFetchRequest(){
@@ -32,19 +35,15 @@ export default function HomePage({ navigation }) {
         fetchData()
     }
 
-    function navigateTo(route) {
-        navigation.navigate(route)
-    }
-
     return (
         <View style={styles.container}>
             <View style={styles.innerContainer}>
                 <View style={styles.collout}>
-                    <IconTile title={"Locations"} imageUrl={listLogoUri} pressHandler={() => navigateTo("Locations list")} />
-                    <IconTile title={"Locations"} imageUrl={mapLogoUri} pressHandler={() => navigateTo("Locations map")} />
+                    <IconTile title={"Locations"} imageUrl={listLogoUri} pressHandler={() => navigation.navigate("Locations list")} />
+                    <IconTile title={"Locations"} imageUrl={mapLogoUri} pressHandler={() => navigation.navigate("Locations map")} />
                 </View>
                 <View style={styles.collout}>
-                    <IconTile title={"Samples"} imageUrl={listLogoUri} pressHandler={() => navigateTo("Samples list")} />
+                    <IconTile title={"Samples"} imageUrl={listLogoUri} pressHandler={() => navigation.navigate("Samples list")} />
                     <IconTile title={"Log ud"} imageUrl={signOutLogoUri} pressHandler={signOut} />
                 </View>
                 <IconTile title={"Sync"} imageUrl={syncLogoUri} pressHandler={handleFetchRequest} />

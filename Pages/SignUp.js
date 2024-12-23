@@ -1,7 +1,7 @@
 import { StyleSheet, View, TextInput, Button, Text } from "react-native";
 import { signUp } from "../Services/Auth/notesAuth";
 import { useState } from "react";
-import SplashScreen from "../Screens/SplashScreen"
+import LoadPage from "./LoadPage"
 
 export default function SignUpPage({ navigation }) {
     let email = ""
@@ -64,9 +64,9 @@ export default function SignUpPage({ navigation }) {
         signUp(email, passwordTwo, onSuccess, onError)
     }
 
-    function renderSplashScreen(){
+    function renderLoadPage(){
         return (
-            <SplashScreen/>
+            <LoadPage/>
         )
     }
 
@@ -82,7 +82,7 @@ export default function SignUpPage({ navigation }) {
         )
     }
     
-    return loading ? renderSplashScreen() : renderSignUpBody()
+    return loading ? renderLoadPage() : renderSignUpBody()
 }
 
 const styles = StyleSheet.create({

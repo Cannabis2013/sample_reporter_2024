@@ -4,7 +4,7 @@ import Samples from "../Services/Samples/Samples"
 import { useFocusEffect } from "@react-navigation/native";
 import SampleItem from "../Components/Samples/SampleGestureItem"
 import sampleLocations from "../Services/Samples/SampleLocations"
-import SplashScreen from "../Screens/SplashScreen"
+import LoadPage from "./LoadPage"
 
 export default function SamplesListView({ navigation }) {
     const samples = Samples.getAll()
@@ -15,7 +15,7 @@ export default function SamplesListView({ navigation }) {
         Samples.fetch().then(() => setLoading(false))}))
 
     if (loading)
-        return (<SplashScreen />)
+        return (<LoadPage />)
 
     function itemTitle(item) {
         const location = sampleLocations.targetByid(item.location)

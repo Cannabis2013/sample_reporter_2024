@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, TextInput, Button } from "react-native";
 import { useState } from "react";
-import SplashScreen from "../Screens/SplashScreen.js";
+import LoadPage from "./LoadPage";
 import {signIn } from "../Services/Auth/notesAuth.js";
 import {authUsername, authPassword} from "../env/authEnv.js"
 
@@ -36,27 +36,19 @@ export default function LoginPage({ navigation }) {
         signIn(username, password, onSuccess, onError)
     }
 
-    function splashScreen() {
-        return (
-            <SplashScreen />
-        )
-    }
-
-    function loginBody() {
-        return (
-            <View style={styles.container}>
-                <Text style={styles.introText}>Enter credentials</Text>
-                <TextInput onChangeText={setUsername} placeholder="Mail/Username"></TextInput>
-                <TextInput onChangeText={setPassword} secureTextEntry={true} placeholder="Password"
-                    textContentType="password"></TextInput>
-                <Button title="Ok" onPress={handleLoginRequest}></Button>
-                <Text style={styles.errorText}>{errorText}</Text>
-            </View>
-        )
-    }
     if (loading)
-        return splashScreen();
-    return loginBody();
+        return (<LoadPage title={"Signing in"} />)
+
+    return (
+        <View style={styles.container}>
+            <Text style={styles.introText}>Enter credentials</Text>
+            <TextInput onChangeText={setUsername} placeholder="Mail/Username"></TextInput>
+            <TextInput onChangeText={setPassword} secureTextEntry={true} placeholder="Password"
+                textContentType="password"></TextInput>
+            <Button title="Ok" onPress={handleLoginRequest}></Button>
+            <Text style={styles.errorText}>{errorText}</Text>
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({
