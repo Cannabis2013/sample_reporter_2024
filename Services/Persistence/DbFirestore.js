@@ -8,6 +8,7 @@ const app = getFirebaseApp()
 const db = getFirestore(app)
 
 export default {
+    collectionId: "",
     async clear() {
         return true
     },
@@ -20,9 +21,9 @@ export default {
         if (e.code == "permission-denied")
             await signOut()
     },
-    async fetchData(collectionId) {
+    async fetchData() {
         const user = userInfo()
-        const colRef = collection(db, collectionId)
+        const colRef = collection(db, this.collectionId)
         const q = query(colRef, where("userId", "==", user.uid))
         const docsRef = await getDocs(q)
         const fetched = []
@@ -33,18 +34,18 @@ export default {
         })
         return fetched
     },
-    async getDocument(id,collectionId) {
-        const colRef = collection(db, collectionId)
+    async getDocument(id) {
+        const colRef = collection(db, this.collectionId)
         const docsRef = await getDocs(colRef)
         const docs = docsRef.docs
         return docs.find(doc => doc.id === id)
     },
-    async removeObject(sample,collectionId) {
-        const doc = await getDocument(sample.id,collectionId)
+    async removeObject(sample) {
+        const doc = await getDocument(sample.id,this.collectionId)
         await deleteDoc(doc.ref)
     },
-    async save(dbObject,collectionId) {
-        const colRef = collection(db, collectionId)
+    async save(dbObject) {
+        const colRef = collection(db, this.collectionId)
         await addDoc(colRef, dbObject).catch(err => console.log(err))
         return true
     }

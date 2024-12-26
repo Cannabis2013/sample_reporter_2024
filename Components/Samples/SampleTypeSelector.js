@@ -4,19 +4,23 @@ import DropDown from "../Controls/DropDown";
 const sampleTypes = [
     {
         label: "CO2",
-        value: "co2"
+        value: "co2",
+        unit: "ppm"
     },
     {
         label: "Ph",
-        value: "ph"
+        value: "ph",
+        unit: "ph"
     },
     {
         label: "Cyprioter",
-        value: "cyp"
+        value: "cyp",
+        unit: "ppm"
     },
     {
         label: "Eucalytter",
-        value: "euc"
+        value: "euc",
+        unit: "ppm"
     }
 ]
 
@@ -32,10 +36,11 @@ export default function UnitSelector(props) {
     const typeHandler = props.onTypeChanged ?? function(item){}
     const types = props.types?.map(toItem) ?? sampleTypes
     const typeValue = props.typeValue
-
     return (
         <View style={[styles.container, props.style]}>
-            <TextInput style={styles.valueInput} onChangeText={valueHandler} placeholder="Enter value.."></TextInput>
+            <TextInput style={styles.valueInput} onChangeText={valueHandler} placeholder="Enter value..">
+                {props.sampleValue ?? ""}
+            </TextInput>
             <View style={styles.unitSelector}>
                 <DropDown value={typeValue} data={types} onChange={typeHandler}></DropDown>
             </View>

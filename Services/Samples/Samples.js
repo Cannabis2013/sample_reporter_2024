@@ -1,11 +1,12 @@
 //import * as LocalNotes from "./NotesJsonFileStorage"
-import FirebaseNotes from "../Persistence/DbFirestore"
+import FirebaseProvider from "../Persistence/DbFirestore"
 import Storage from "../Persistence/StorageFirebase";
 import { getCurrentDate, getCurrentTime } from "../../Utils/date"
 
-const PersistenceProvider = FirebaseNotes
+const PersistenceProvider = FirebaseProvider
 
-const collectionId = 'Samples'
+PersistenceProvider.collectionId = 'Samples'
+
 let samples = []
 let fetchingRequired = true
 
@@ -19,26 +20,29 @@ export default {
     getAll() {
         return samples
     },
+    getById(id){
+        return samples.find(s => s.id == id)
+    },
     fromLocation(locationId){
         return samples.filter(item => item.location == locationId)
     },
     async fetch() {
         if(fetchingRequired){
-            samples = await PersistenceProvider.fetchData(collectionId)
+            samples = await PersistenceProvider.fetchData()
             fetchingRequired = false
         }
     },
     async remove(dbObject) {
         const uris = dbObject.images.map(img => img.imageId)
         await Storage.removeObjects(uris)
-        await PersistenceProvider.removeObject(dbObject,collectionId)
+        await PersistenceProvider.removeObject(dbObject)
         fetchingRequired = true
     },
     async save(dbObject) {
         dbObject.images = await Storage.uploadObjects(dbObject.images)
         dbObject.date = getCurrentDate()
         dbObject.time = getCurrentTime()
-        const result = await PersistenceProvider.save(dbObject,collectionId)
+        const result = await PersistenceProvider.save(dbObject)
         fetchingRequired = true
         return result
     },

@@ -1,26 +1,25 @@
-import { Animated, Button, StyleSheet, Text, View, PanResponder, Dimensions } from "react-native";
+import { Animated, Button, StyleSheet, Text, View, PanResponder, Dimensions, TouchableOpacity } from "react-native";
 import React, { useRef, useState } from "react";
-
-let t;
 
 export default function SampleItem(props) {
     const [x, setX] = useState(-125)
     const dx = useRef(0)
+    const t = useRef(0)
     const sample = props.sample
 
     function handleMove(event, gestureState) {
         dx.current = gestureState.dx - 125
         if (dx.current > 0 && dx.current <= 0)
             setX(dx.current)
-        else if(dx.current < 0 && dx.current > -250)
+        else if (dx.current < 0 && dx.current > -250)
             setX(dx.current)
     }
 
     function handleRelease() {
-        t = dx.current + 125
-        if (t < -100)
+        t.current = dx.current + 125
+        if (t.current < -100)
             setX(-250)
-        else if(t > 100)
+        else if (t.current > 100)
             setX(0)
         else
             setX(-125)
@@ -34,16 +33,16 @@ export default function SampleItem(props) {
         }),
     ).current;
 
-    function deleteHandler(){
-        props.navigator.navigate("Delete sample",{ sample: sample })
+    function deleteHandler() {
+        props.navigator.navigate("Delete sample", { sample: sample })
     }
 
-    function detailsHandler(){
-        props.navigator.navigate("Sample details", {sample: sample})
+    function updateHandler() {
+        props.navigator.navigate("Update sample", { id: sample.id })
     }
 
-    function updateHandler(){
-        props.navigator.navigate("Update note",{ sample: sample })
+    function detailsHandler() {
+        props.navigator.navigate("Sample details", { sample: sample })
     }
 
     return (
@@ -57,9 +56,14 @@ export default function SampleItem(props) {
             <View style={styles.itemContainer}>
                 <Text style={styles.itemData} onPress={detailsHandler}>{props.itemText(sample)}</Text>
             </View>
-            <View style={styles.updateContainer}>
+            <View
+                style={styles.updateContainer}>
                 <View style={styles.containerButton}>
-                    <Button color={"blue"} title={"Update"} onPress={deleteHandler} />
+                    <Button
+                        color={"blue"}
+                        title={"Update"}
+                        onPress={updateHandler}
+                    />
                 </View>
             </View>
         </Animated.View>

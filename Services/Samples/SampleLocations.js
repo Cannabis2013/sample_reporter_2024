@@ -29,7 +29,7 @@ export default {
     all() {
         return sampleLocations
     },
-    targetByid(id) {
+    getById(id) {
         return sampleLocations.find(location => location.id == id)
     }
 }

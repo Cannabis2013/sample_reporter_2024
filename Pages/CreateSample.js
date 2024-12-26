@@ -13,7 +13,7 @@ export default function CreateSample({ navigation, route }) {
     const [loading, setLoading] = useState(false)
     const [note, setNote] = useState("")
     const [location, setLocation] = useState(route?.params?.location ?? "")
-    const [sampleType, setSampleType] = useState("")
+    const [sampleType, setSampleType] = useState({})
     const [sampleValue, setSampleValue] = useState(0)
     const [images, setImages] = useState([])
     const [count, setCount] = useState(0)
@@ -26,8 +26,8 @@ export default function CreateSample({ navigation, route }) {
             userId: userInfo().uid,
             location: location.id,
             value: sampleValue,
-            type: sampleType,
-            unit: "ppm"
+            type: sampleType.value,
+            unit: sampleType.unit
         }
     }
 

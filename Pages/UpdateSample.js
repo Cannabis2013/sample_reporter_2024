@@ -6,22 +6,47 @@ import LoadPage from "./LoadPage"
 import ImageGallary from "../Components/Images/ImageGallary"
 import LocationSelector from "../Components/Samples/SampleLocationSelector"
 import TypeSelector from "../Components/Samples/SampleTypeSelector";
+import SampleLocations from "../Services/Samples/SampleLocations"
+import Samples from "../Services/Samples/Samples"
+
+function createSampleObject(){
+    return  {
+        sample: {},
+        setContent(content){
+            this.sample.content = content
+        },
+        setType(type){
+            this.sample.type = type
+        },
+        setUnit(unit){
+            this.sample.unit = unit
+        },
+        setValue(value){
+            this.sample.value = value
+        },
+        setLocation(location){
+            this.sample.location = location.id
+        }
+    }
+}
 
 export default function UpdateSample({ navigation, route }) {
     const [loading, setLoading] = useState(false)
-    const sample = route.params.sample
-    const [count, setCount] = useState(sample.note.length)
+    const sampleObject = createSampleObject()
+    sampleObject.sample = Samples.getById(route.params.id)
+    const uris = sampleObject.sample.images.map(img => img.uri)
+    const [count, setCount] = useState(sampleObject.sample.content.length)
+    const location = SampleLocations.getById(sampleObject.sample.location)
     const limit = 250
 
     async function handleUpdateSample() {
-        
     }
 
     async function selectImage() {
         const imagePath = await pickImage()
         setLoading(true)
         if (imagePath)
-            sample.images.push(imagePath)
+            sampleObject.images.push(imagePath)
         setTimeout(() => {
             setLoading(false)
         }, 500);
@@ -31,20 +56,23 @@ export default function UpdateSample({ navigation, route }) {
         const imagePath = await launchCamera()
         setLoading(true)
         if (imagePath)
-            sample.images.push(imagePath)
+            sampleObject.images.push(imagePath)
         setTimeout(() => {
             setLoading(false)
         }, 50);
     }
 
     function removeImage(image) {
-        sample.images = sample.images.filter(img => img.uri != image)
+        setLoading(true)
+        // Delete image from Firebase Storage
+        sampleObject.sample.images = sampleObject.sample.images.filter(img => img.uri != image)
+        setLoading(false)
     }
 
-    function updateNote(text){
-        if(text.length > limit)
+    function updateNote(text) {
+        if (text.length > limit)
             return
-        sample.note = text
+        sampleObject.sample.content = text
         setCount(text.length)
     }
 
@@ -55,15 +83,37 @@ export default function UpdateSample({ navigation, route }) {
         <View style={styles.container}>
             <View style={styles.controlTile}>
                 <View style={styles.buttonGroup}>
-                    <ImageControls onCapture={captureImage} onPick={selectImage}></ImageControls>
-                    <Button title={"Gem"} onPress={handleUpdateSample}></Button>
+                    <ImageControls onCapture={captureImage} onPick={selectImage} />
+                    <Button title={"Gem"} onPress={handleUpdateSample} />
                 </View>
-                <LocationSelector currentValue={location} style={styles.targetSelector} onUpdateValue={setLocation} />
+                <LocationSelector
+                    currentValue={location}
+                    style={styles.targetSelector}
+                    onUpdateValue={sampleObject.setLocation}
+                />
             </View>
             <Text style={styles.wordCount}>{`${count}/${limit}`}</Text>
-            <TextInput value={note} onChangeText={updateNote} multiline editable style={styles.note} placeholder={"Notes"} />
-            <ImageGallary style={styles.gallary} images={images} onDelete={removeImage} />
-            <TypeSelector style={styles.unitSelector} typeValue={sampleType} types={location.types} onValueChanged={setSampleValue} onTypeChanged={setSampleType}></TypeSelector>
+            <TextInput
+                value={sampleObject.sample.content}
+                onChangeText={updateNote}
+                multiline
+                editable
+                style={styles.note}
+                placeholder={"Notes"}
+            />
+            <ImageGallary
+                style={styles.gallary}
+                images={uris}
+                onDelete={removeImage}
+            />
+            <TypeSelector
+                style={styles.unitSelector}
+                sampleValue={sampleObject.sample.value}
+                typeValue={sampleObject.sample.type}
+                types={sampleObject.sample.location.types}
+                onValueChanged={sampleObject.setValue}
+                onTypeChanged={sampleObject.setType}
+            />
         </View>
     )
 }

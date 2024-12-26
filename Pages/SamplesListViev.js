@@ -18,7 +18,7 @@ export default function SamplesListView({ navigation }) {
         return (<LoadPage />)
 
     function itemTitle(item) {
-        const location = sampleLocations.targetByid(item.location)
+        const location = sampleLocations.getById(item.location)
         return `${item.date} | ${location?.name ?? "Ukendt"}`
     }
 

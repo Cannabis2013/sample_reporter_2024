@@ -30,7 +30,7 @@ export default function DropDown(props){
                 onChange={item => {
                     setValue(item.value);
                     setIsFocus(false);
-                    props.onChange(item.value)
+                    props.onChange(item)
                 }}
                 renderLeftIcon={() => (
                     <AntDesign
