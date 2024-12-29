@@ -12,7 +12,7 @@ import Samples from "../Services/Samples/Samples"
 export default function CreateSample({ navigation, route }) {
     const [loading, setLoading] = useState(false)
     const [note, setNote] = useState("")
-    const [location, setLocation] = useState(route?.params?.location ?? "")
+    const [location, setLocation] = useState(route?.params?.location ?? null)
     const [sampleType, setSampleType] = useState({})
     const [sampleValue, setSampleValue] = useState(0)
     const [images, setImages] = useState([])
@@ -32,7 +32,7 @@ export default function CreateSample({ navigation, route }) {
     }
 
     async function handleSaveClicked() {
-        if (location === "")
+        if (!location)
             return
         setLoading(true)
         if (await Samples.save(createSample()))
@@ -69,8 +69,8 @@ export default function CreateSample({ navigation, route }) {
         setImages(filtered)
     }
 
-    function updateNote(text){
-        if(text.length > limit)
+    function updateNote(text) {
+        if (text.length > limit)
             return
         setNote(text)
         setCount(text.length)
@@ -83,16 +83,29 @@ export default function CreateSample({ navigation, route }) {
         <View style={styles.container}>
             <View style={styles.controlTile}>
                 <View style={styles.buttonGroup}>
-                    <ImageControls onCapture={captureImage} onPick={selectImage}></ImageControls>
-                    <Button title={"Gem"} onPress={handleSaveClicked}></Button>
+                    <ImageControls onCapture={captureImage} onPick={selectImage} />
+                    <Button title={"Gem"} onPress={handleSaveClicked} />
                 </View>
-                <LocationSelector currentValue={location} style={styles.targetSelector} onUpdateValue={setLocation} />
+                <LocationSelector currentValue={location ?? {}} style={styles.targetSelector} onUpdateValue={setLocation} />
             </View>
-            <Text style={styles.wordCount}>{`${count}/${limit}`}</Text>
-            <TextInput value={note} onChangeText={updateNote} multiline editable style={styles.note} placeholder={"Notes"} />
-            <ImageGallary style={styles.gallary} images={images} onDelete={removeImage} />
-            <TypeSelector style={styles.unitSelector} typeValue={sampleType} types={location.types} onValueChanged={setSampleValue} onTypeChanged={setSampleType}></TypeSelector>
-        </View>
+            {location ?
+               (
+                <>
+                <Text style={styles.wordCount}>{`${count}/${limit}`}</Text>
+                <TextInput value={note} onChangeText={updateNote} multiline editable style={styles.note} placeholder={"Notes"} />
+                <ImageGallary style={styles.gallary} images={images} onDelete={removeImage} />
+                <TypeSelector
+                    style={styles.unitSelector}
+                    sampleValue={sampleValue}
+                    typeValue={sampleType}
+                    types={location.types}
+                    onValueChanged={setSampleValue}
+                    onTypeChanged={setSampleType}
+                />
+            </>
+               )
+                : <Text style={{fontSize:24, fontWeight:"bold"}}>Please select a location</Text>}
+        </View >
     )
 }
 

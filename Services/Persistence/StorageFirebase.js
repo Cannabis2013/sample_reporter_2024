@@ -1,8 +1,6 @@
 import { getStorageReference } from "../../firebaseConfig";
 import { getDownloadURL, ref, uploadBytes, deleteObject } from "@firebase/storage";
-import {asBlob} from "../../Services/Images/imageFetch"
-
-let errorMessage
+import { asBlob } from "../../Services/Images/imageFetch"
 
 function createPath() {
     const title = "img-" + new Date().getTime();
@@ -20,7 +18,6 @@ async function toStorageBlobs(data) {
 }
 
 function handleError(error) {
-    errorMessage = error
     return undefined
 }
 
@@ -46,7 +43,7 @@ async function upload(object) {
     const storageRef = getStorageRef(object.path)
     if (!storageRef)
         return undefined
-    const imageUri = await uploadFile(storageRef, object,data)
+    const imageUri = await uploadFile(storageRef, object.data)
     return { imageId: object.path, uri: imageUri }
 }
 
@@ -56,8 +53,8 @@ export default {
         const objectRefs = []
         let objectRef
         for (let i = 0; i < blobs.length; i++) {
-            const object = blobs[i];
-            objectRef = await upload(object)
+            const blob = blobs[i]
+            objectRef = await upload(blob)
             objectRefs.push(objectRef)
         }
         return objectRefs

@@ -39,15 +39,18 @@ export default {
         fetchingRequired = true
     },
     async save(dbObject) {
+        console.log("1")
         dbObject.images = await Storage.uploadObjects(dbObject.images)
+        console.log("2")
         dbObject.date = getCurrentDate()
+        console.log("3")
         dbObject.time = getCurrentTime()
         const result = await PersistenceProvider.save(dbObject)
         fetchingRequired = true
         return result
     },
     async update(dbObject){
-        
+        return true
     }
 }
 

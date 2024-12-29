@@ -24,8 +24,8 @@ export default function SampleTargetSelector(props) {
     if(needsFetch)
         SampleLocations.fetch().then(() => setLoading(false))
 
-    function handleChange(value){
-        const location = locations.find(loc => loc.id == value)
+    function handleChange(item){
+        const location = locations.find(loc => loc.id == item.value)
         if(location && props.onUpdateValue)
             props.onUpdateValue(location)
     }

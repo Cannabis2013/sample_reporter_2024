@@ -24,23 +24,25 @@ const sampleTypes = [
     }
 ]
 
-function toItem(type){
+function toItem(type) {
     const found = sampleTypes.find(t => t.value == type)
-    if(!found)
-        return {name: type, value: type}
+    if (!found)
+        return { name: type, value: type }
     return found
 }
 
 export default function UnitSelector(props) {
-    const valueHandler = props.onValueChanged ?? function(item){}
-    const typeHandler = props.onTypeChanged ?? function(item){}
+    const valueHandler = props.onValueChanged ?? function (value) { }
+    const typeHandler = props.onTypeChanged ?? function (item) { }
     const types = props.types?.map(toItem) ?? sampleTypes
     const typeValue = props.typeValue
     return (
         <View style={[styles.container, props.style]}>
-            <TextInput style={styles.valueInput} onChangeText={valueHandler} placeholder="Enter value..">
-                {props.sampleValue ?? ""}
-            </TextInput>
+            <TextInput
+                style={styles.valueInput}
+                onChangeText={valueHandler}
+                placeholder="Enter value.."
+            >{props.sampleValue ?? ""}</TextInput>
             <View style={styles.unitSelector}>
                 <DropDown value={typeValue} data={types} onChange={typeHandler}></DropDown>
             </View>

@@ -1,5 +1,5 @@
 import { Button, TextInput, View, StyleSheet, Text } from "react-native";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import ImageControls from "../Components/Images/ImageControls"
 import { launchCamera, pickImage } from "../Services/Images/images";
 import LoadPage from "./LoadPage"
@@ -9,44 +9,37 @@ import TypeSelector from "../Components/Samples/SampleTypeSelector";
 import SampleLocations from "../Services/Samples/SampleLocations"
 import Samples from "../Services/Samples/Samples"
 
-function createSampleObject(){
-    return  {
-        sample: {},
-        setContent(content){
-            this.sample.content = content
-        },
-        setType(type){
-            this.sample.type = type
-        },
-        setUnit(unit){
-            this.sample.unit = unit
-        },
-        setValue(value){
-            this.sample.value = value
-        },
-        setLocation(location){
-            this.sample.location = location.id
-        }
+function createCopy(sample) {
+    return {
+        content: sample.content,
+        images: sample.images,
+        userId: sample.userId,
+        location: location.id,
+        value: sample.value,
+        type: sample.type,
+        unit: sample.unit
     }
 }
 
 export default function UpdateSample({ navigation, route }) {
     const [loading, setLoading] = useState(false)
-    const sampleObject = createSampleObject()
-    sampleObject.sample = Samples.getById(route.params.id)
-    const uris = sampleObject.sample.images.map(img => img.uri)
-    const [count, setCount] = useState(sampleObject.sample.content.length)
-    const location = SampleLocations.getById(sampleObject.sample.location)
+    const sample = createCopy(Samples.getById(route.params.id))
+    const [count, setCount] = useState(sample.content.length)
+    const location = SampleLocations.getById(sample.location)
     const limit = 250
 
     async function handleUpdateSample() {
+        setLoading(true)
+        if (await Samples.update(sample))
+            navigation.goBack()
+        setLoading(false)
     }
 
     async function selectImage() {
         const imagePath = await pickImage()
         setLoading(true)
         if (imagePath)
-            sampleObject.images.push(imagePath)
+            sample.images.push(imagePath)
         setTimeout(() => {
             setLoading(false)
         }, 500);
@@ -56,17 +49,29 @@ export default function UpdateSample({ navigation, route }) {
         const imagePath = await launchCamera()
         setLoading(true)
         if (imagePath)
-            sampleObject.images.push(imagePath)
+            sample.images.push(imagePath)
         setTimeout(() => {
             setLoading(false)
         }, 50);
     }
 
-    function removeImage(image) {
+    function removeExistingImages(image) {
         setLoading(true)
-        // Delete image from Firebase Storage
         sampleObject.sample.images = sampleObject.sample.images.filter(img => img.uri != image)
         setLoading(false)
+    }
+
+    function updateSampleType(sampleType) {
+        sample.type = sampleType.value
+        sample.unit = sampleType.unit
+    }
+
+    function updateSampleValue(value) {
+        this.sample.value = value
+    }
+
+    function updateLocation(location) {
+        this.sample.location = location.id
     }
 
     function updateNote(text) {
@@ -89,12 +94,12 @@ export default function UpdateSample({ navigation, route }) {
                 <LocationSelector
                     currentValue={location}
                     style={styles.targetSelector}
-                    onUpdateValue={sampleObject.setLocation}
+                    onUpdateValue={updateLocation}
                 />
             </View>
             <Text style={styles.wordCount}>{`${count}/${limit}`}</Text>
             <TextInput
-                value={sampleObject.sample.content}
+                value={sample.content}
                 onChangeText={updateNote}
                 multiline
                 editable
@@ -103,16 +108,21 @@ export default function UpdateSample({ navigation, route }) {
             />
             <ImageGallary
                 style={styles.gallary}
-                images={uris}
-                onDelete={removeImage}
+                images={sample.images.map(img => img.uri)}
+                onDelete={removeExistingImages}
+            />
+            <ImageGallary
+                style={styles.gallary}
+                images={sample.images.map(img => img.uri)}
+                onDelete={removeExistingImages}
             />
             <TypeSelector
                 style={styles.unitSelector}
-                sampleValue={sampleObject.sample.value}
-                typeValue={sampleObject.sample.type}
-                types={sampleObject.sample.location.types}
-                onValueChanged={sampleObject.setValue}
-                onTypeChanged={sampleObject.setType}
+                sampleValue={sample.value}
+                typeValue={sample.type}
+                types={sample.location.types}
+                onValueChanged={updateSampleValue}
+                onTypeChanged={updateSampleType}
             />
         </View>
     )

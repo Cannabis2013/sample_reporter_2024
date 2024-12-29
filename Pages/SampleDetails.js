@@ -13,7 +13,7 @@ const gallaryLogoUri = require("../assets/gallary2.png")
 export default function SampleDetails({ route }) {
     const sample = route.params.sample
     const uris = sample.images.map(img => img.uri)
-    const location = locations.targetByid(sample.location).name
+    const location = locations.getById(sample.location).name
 
     return (
         <View style={styles.container}>
