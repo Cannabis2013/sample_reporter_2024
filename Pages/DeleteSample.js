@@ -2,6 +2,7 @@ import { Button, StyleSheet, Text, View } from "react-native";
 import Samples from "../Services/Samples/Samples"
 import { useState } from "react";
 import LoadPage from "./LoadPage"
+import Storage from "../Services/Persistence/StorageFirebase";
 
 export default function DeleteSample({ route, navigation }) {
     const [loading, setLoading] = useState(false)
@@ -9,6 +10,8 @@ export default function DeleteSample({ route, navigation }) {
 
     async function deleteSample() {
         setLoading(true)
+        const imageIds = sample.images.map(img => img.imageId)
+        await Storage.removeObjects(imageIds)
         await Samples.remove(sample)
         navigation.goBack()
     }

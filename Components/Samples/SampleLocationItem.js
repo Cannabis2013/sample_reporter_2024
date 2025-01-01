@@ -15,11 +15,6 @@ export default function LocationItem(props) {
         props.navigator.navigate("Location details", { location })
     }
 
-    function pressHandler() {
-        if (props.onPressed)
-            props.onPressed(location)
-    }
-
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.touchable} onPress={toDetails}>

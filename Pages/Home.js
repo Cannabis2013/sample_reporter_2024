@@ -14,7 +14,7 @@ const syncLogoUri = require("../assets/sync-logo.png")
 export default function HomePage({ navigation }) {
     const [loading, setLoading] = useState(true)
 
-    function fetchData() {
+    async function fetchData() {
         if(!loading)
             return
         Locations.fetch().then(() => {

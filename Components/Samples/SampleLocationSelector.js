@@ -19,7 +19,7 @@ export default function SampleTargetSelector(props) {
     const [loading,setLoading] = useState(needsFetch)
     const locations = SampleLocations.all()
     const items = locations.map(toItem)
-    const currentValue = props.currentValue?.id ?? undefined
+    const currentValue = props.currentValue ?? undefined
 
     if(needsFetch)
         SampleLocations.fetch().then(() => setLoading(false))
@@ -27,7 +27,7 @@ export default function SampleTargetSelector(props) {
     function handleChange(item){
         const location = locations.find(loc => loc.id == item.value)
         if(location && props.onUpdateValue)
-            props.onUpdateValue(location)
+            props.onUpdateValue(location.id)
     }
 
     if(loading)

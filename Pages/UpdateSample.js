@@ -5,32 +5,40 @@ import { launchCamera, pickImage } from "../Services/Images/images";
 import LoadPage from "./LoadPage"
 import ImageGallary from "../Components/Images/ImageGallary"
 import LocationSelector from "../Components/Samples/SampleLocationSelector"
-import TypeSelector from "../Components/Samples/SampleTypeSelector";
-import SampleLocations from "../Services/Samples/SampleLocations"
+import TypeSelector from "../Components/Samples/SampleTypeSelector"
 import Samples from "../Services/Samples/Samples"
-
-function createCopy(sample) {
-    return {
-        content: sample.content,
-        images: sample.images,
-        userId: sample.userId,
-        location: location.id,
-        value: sample.value,
-        type: sample.type,
-        unit: sample.unit
-    }
-}
+import Storage from "../Services/Persistence/StorageFirebase"
 
 export default function UpdateSample({ navigation, route }) {
+    const sample = Samples.getById(route.params.id)
+    const sampleImages = sample.images
     const [loading, setLoading] = useState(false)
-    const sample = createCopy(Samples.getById(route.params.id))
+    const [note, setNote] = useState(sample.content)
+    const [location, setLocation] = useState(sample.location)
+    const [scrappedSaved, setScrappedSaved] = useState([]);
+    const [capturedImages, setCapturedImages] = useState([]);
+    const [sampleType, setSampleType] = useState(sample.type)
+    const [sampleValue, setSampleValue] = useState(sample.value)
     const [count, setCount] = useState(sample.content.length)
-    const location = SampleLocations.getById(sample.location)
     const limit = 250
+
+    function createSample(sampleImages) {
+        return {
+            content: note,
+            images: sampleImages,
+            location: location,
+            value: sampleValue,
+            type: sampleType,
+            unit: sampleType
+        }
+    }
 
     async function handleUpdateSample() {
         setLoading(true)
-        if (await Samples.update(sample))
+        await Storage.removeObjects(scrappedSaved)
+        const images = await Storage.uploadObjects(capturedImages)
+        const all = [...sampleImages,...images]
+        if (await Samples.update(sample.id,createSample(all)))
             navigation.goBack()
         setLoading(false)
     }
@@ -39,7 +47,7 @@ export default function UpdateSample({ navigation, route }) {
         const imagePath = await pickImage()
         setLoading(true)
         if (imagePath)
-            sample.images.push(imagePath)
+            setCapturedImages([...capturedImages, imagePath])
         setTimeout(() => {
             setLoading(false)
         }, 500);
@@ -49,36 +57,26 @@ export default function UpdateSample({ navigation, route }) {
         const imagePath = await launchCamera()
         setLoading(true)
         if (imagePath)
-            sample.images.push(imagePath)
+            setCapturedImages([...capturedImages, imagePath])
         setTimeout(() => {
             setLoading(false)
         }, 50);
     }
 
-    function removeExistingImages(image) {
-        setLoading(true)
-        sampleObject.sample.images = sampleObject.sample.images.filter(img => img.uri != image)
-        setLoading(false)
+    function scrapSaved(saved) {
+        const imageId = sampleImages.find(img => img.url == saved)?.id ?? ""
+        sampleImages = sampleImages.filter(img => img.id != imageId.id)
+        setScrappedSaved([...scrapSaved,imageId])
     }
 
-    function updateSampleType(sampleType) {
-        sample.type = sampleType.value
-        sample.unit = sampleType.unit
-    }
-
-    function updateSampleValue(value) {
-        this.sample.value = value
-    }
-
-    function updateLocation(location) {
-        this.sample.location = location.id
+    function scrapCaptured(captured) {
+        capturedImages = captureImage.filter(cap => cap != captured)
+        setCapturedImages(capturedImages)
     }
 
     function updateNote(text) {
-        if (text.length > limit)
-            return
-        sampleObject.sample.content = text
-        setCount(text.length)
+        setNote(text.length <= limit ? text : note)
+        setCount(text.length) 
     }
 
     if (loading)
@@ -94,12 +92,12 @@ export default function UpdateSample({ navigation, route }) {
                 <LocationSelector
                     currentValue={location}
                     style={styles.targetSelector}
-                    onUpdateValue={updateLocation}
+                    onUpdateValue={setLocation}
                 />
             </View>
             <Text style={styles.wordCount}>{`${count}/${limit}`}</Text>
             <TextInput
-                value={sample.content}
+                value={note}
                 onChangeText={updateNote}
                 multiline
                 editable
@@ -108,21 +106,21 @@ export default function UpdateSample({ navigation, route }) {
             />
             <ImageGallary
                 style={styles.gallary}
-                images={sample.images.map(img => img.uri)}
-                onDelete={removeExistingImages}
+                images={sampleImages.map(img => img.uri)}
+                onDelete={scrapSaved}
             />
             <ImageGallary
                 style={styles.gallary}
-                images={sample.images.map(img => img.uri)}
-                onDelete={removeExistingImages}
+                images={capturedImages}
+                onDelete={scrapCaptured}
             />
             <TypeSelector
                 style={styles.unitSelector}
-                sampleValue={sample.value}
-                typeValue={sample.type}
+                sampleValue={sampleValue}
+                typeValue={sampleType}
                 types={sample.location.types}
-                onValueChanged={updateSampleValue}
-                onTypeChanged={updateSampleType}
+                onValueChanged={setSampleValue}
+                onTypeChanged={setSampleType}
             />
         </View>
     )
@@ -155,7 +153,8 @@ const styles = StyleSheet.create({
         fontSize: 16,
         backgroundColor: tileColor,
         padding: 16,
-        fontSize: 32
+        fontSize: 32,
+        minHeight: 256
     },
     controlTile: {
         borderRadius: 8,

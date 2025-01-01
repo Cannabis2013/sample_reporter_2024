@@ -39,7 +39,7 @@ export default function LocationDetails({ navigation, route }) {
 
             <View style={[styles.tile, styles.samplesTile]}>
                 <Text style={styles.label}>Samples</Text>
-                <Button onPress={() => navigation.navigate("Create sample", { location })} title="+" color={"green"}></Button>
+                <Button onPress={() => navigation.navigate("Create sample", { location: location.id })} title="+" color={"green"}></Button>
                 <FlatList data={samples} ItemSeparatorComponent={<View style={styles.listSeparator}/>} renderItem={({ item }) => <SampleItem itemText={itemTitle} navigator={navigation} sample={item} />} />
             </View>
         </View>

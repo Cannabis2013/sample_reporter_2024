@@ -8,6 +8,7 @@ import { userInfo } from "../Services/Auth/notesAuth";
 import LocationSelector from "../Components/Samples/SampleLocationSelector"
 import TypeSelector from "../Components/Samples/SampleTypeSelector";
 import Samples from "../Services/Samples/Samples"
+import Storage from "../Services/Persistence/StorageFirebase"
 
 export default function CreateSample({ navigation, route }) {
     const [loading, setLoading] = useState(false)
@@ -19,10 +20,10 @@ export default function CreateSample({ navigation, route }) {
     const [count, setCount] = useState(0)
     const limit = 250
 
-    function createSample() {
+    function createSample(urls) {
         return {
             content: note,
-            images,
+            images: urls,
             userId: userInfo().uid,
             location: location.id,
             value: sampleValue,
@@ -35,7 +36,8 @@ export default function CreateSample({ navigation, route }) {
         if (!location)
             return
         setLoading(true)
-        if (await Samples.save(createSample()))
+        const urls = await Storage.uploadObjects(images)
+        if (await Samples.save(createSample(urls)))
             navigation.goBack()
         setLoading(false)
     }

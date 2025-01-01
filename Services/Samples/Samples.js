@@ -1,6 +1,5 @@
 //import * as LocalNotes from "./NotesJsonFileStorage"
 import FirebaseProvider from "../Persistence/DbFirestore"
-import Storage from "../Persistence/StorageFirebase";
 import { getCurrentDate, getCurrentTime } from "../../Utils/date"
 
 const PersistenceProvider = FirebaseProvider
@@ -9,6 +8,8 @@ PersistenceProvider.collectionId = 'Samples'
 
 let samples = []
 let fetchingRequired = true
+const timeoutLimit = 3000
+const timeoutMessage = "Timeout occured"
 
 export default {
     isFetched() {
@@ -33,24 +34,23 @@ export default {
         }
     },
     async remove(dbObject) {
-        const uris = dbObject.images.map(img => img.imageId)
-        await Storage.removeObjects(uris)
         await PersistenceProvider.removeObject(dbObject)
         fetchingRequired = true
     },
     async save(dbObject) {
-        console.log("1")
-        dbObject.images = await Storage.uploadObjects(dbObject.images)
-        console.log("2")
         dbObject.date = getCurrentDate()
-        console.log("3")
         dbObject.time = getCurrentTime()
-        const result = await PersistenceProvider.save(dbObject)
+        await PersistenceProvider.save(dbObject)
         fetchingRequired = true
-        return result
-    },
-    async update(dbObject){
         return true
+    },
+    async update(id,dbObject){
+        try {
+            return await PersistenceProvider.update(id,dbObject)
+        } catch (msg) {
+            console.log(msg)
+            return false
+        }
     }
 }
 
