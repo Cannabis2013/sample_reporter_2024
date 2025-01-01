@@ -12,7 +12,8 @@ export default function SamplesListView({ navigation }) {
 
     useFocusEffect(useCallback(() => {
         setLoading(true)
-        Samples.fetch().then(() => setLoading(false))}))
+        Samples.fetch().then(() => setLoading(false))
+    }))
 
     if (loading)
         return (<LoadPage />)

@@ -52,13 +52,9 @@ export default {
         return result
     },
      async update(id,dbObject){
-        console.log("1")
         const colRef = collection(db, this.collectionId)
         const docRef = doc(colRef, id)
-        let result = true
-        console.log(dbObject)
         await updateDoc(docRef,dbObject)
-        console.log("3")
-        return result
+        return true
      }
 }

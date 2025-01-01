@@ -34,21 +34,30 @@ export default {
         }
     },
     async remove(dbObject) {
-        await PersistenceProvider.removeObject(dbObject)
+        try {
+            await PersistenceProvider.removeObject(dbObject)
+        } catch (msg) {
+            return
+        }
         fetchingRequired = true
     },
     async save(dbObject) {
         dbObject.date = getCurrentDate()
         dbObject.time = getCurrentTime()
-        await PersistenceProvider.save(dbObject)
+        try {
+            await PersistenceProvider.save(dbObject)
+        } catch (msg) {
+            return false
+        }
         fetchingRequired = true
         return true
     },
     async update(id,dbObject){
         try {
-            return await PersistenceProvider.update(id,dbObject)
+            await PersistenceProvider.update(id,dbObject)
+            fetchingRequired = true
+            return true
         } catch (msg) {
-            console.log(msg)
             return false
         }
     }

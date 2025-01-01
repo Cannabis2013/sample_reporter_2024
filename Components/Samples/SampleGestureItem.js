@@ -34,14 +34,17 @@ export default function SampleItem(props) {
     ).current;
 
     function deleteHandler() {
+        setX(-125)
         props.navigator.navigate("Delete sample", { sample: sample })
     }
 
     function updateHandler() {
+        setX(-125)
         props.navigator.navigate("Update sample", { id: sample.id })
     }
 
     function detailsHandler() {
+        setX(-125)
         props.navigator.navigate("Sample details", { sample: sample })
     }
 
