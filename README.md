@@ -1,5 +1,5 @@
 # Sample Collector 2024
-An exam project for the course React Native Mobile Development. 
+An exam project for the course Mobile Development React Native E24. 
 
 ## Connect to firebase
 Create a folder 'env' with the following files: 
