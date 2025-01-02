@@ -17,8 +17,8 @@ export default function HomePage({ navigation }) {
     async function fetchData() {
         if(!loading)
             return
-        Locations.fetch().then(() => {
-            Samples.fetch().then(
+        Locations.forceFetch().then(() => {
+            Samples.forceFetch().then(
                 () => setLoading(false)
             )
         })

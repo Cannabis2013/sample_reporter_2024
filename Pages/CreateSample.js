@@ -4,7 +4,6 @@ import ImageControls from "../Components/Images/ImageControls"
 import { launchCamera, pickImage } from "../Services/Images/images";
 import LoadPage from "./LoadPage"
 import ImageGallary from "../Components/Images/ImageGallary"
-import { userInfo } from "../Services/Auth/notesAuth";
 import LocationSelector from "../Components/Samples/SampleLocationSelector"
 import TypeSelector from "../Components/Samples/SampleTypeSelector";
 import Samples from "../Services/Samples/Samples"
@@ -13,7 +12,7 @@ import Storage from "../Services/Persistence/StorageFirebase"
 export default function CreateSample({ navigation, route }) {
     const [loading, setLoading] = useState(false)
     const [note, setNote] = useState("")
-    const [location, setLocation] = useState(route?.params?.location ?? null)
+    const [location, setLocation] = useState(route?.params?.location ?? "")
     const [sampleType, setSampleType] = useState({})
     const [sampleValue, setSampleValue] = useState(0)
     const [images, setImages] = useState([])
@@ -24,7 +23,6 @@ export default function CreateSample({ navigation, route }) {
         return {
             content: note,
             images: urls,
-            userId: userInfo().uid,
             location: location.id,
             value: sampleValue,
             type: sampleType.value,
@@ -88,7 +86,7 @@ export default function CreateSample({ navigation, route }) {
                     <ImageControls onCapture={captureImage} onPick={selectImage} />
                     <Button title={"Gem"} onPress={handleSaveClicked} />
                 </View>
-                <LocationSelector currentValue={location ?? {}} style={styles.targetSelector} onUpdateValue={setLocation} />
+                <LocationSelector currentValue={location} style={styles.targetSelector} onUpdateValue={setLocation} />
             </View>
             {location ?
                (

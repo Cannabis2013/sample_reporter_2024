@@ -8,7 +8,7 @@ import DeleteSample from "./Pages/DeleteSample";
 import SignInPage from './Pages/SignIn';
 import StartPage from './Pages/Start';
 import SignUpPage from './Pages/SignUp';
-import { initAuth, onSignedInChanged } from './Services/Auth/notesAuth';
+import Auth from './Services/Auth/notesAuth';
 import UserPage from './Pages/UserDetails';
 import { useState } from 'react';
 import HomePage from './Pages/Home';
@@ -20,12 +20,12 @@ import UpdateSample from "./Pages/UpdateSample"
 
 const Stack = createNativeStackNavigator();
 
-initAuth()
+Auth.initAuth()
 
 export default function App() {
     const [signedIn, setSignedIn] = useState(false)
 
-    onSignedInChanged((status) => {
+    Auth.onSignedInChanged((status) => {
         setSignedIn(status)
     })
 

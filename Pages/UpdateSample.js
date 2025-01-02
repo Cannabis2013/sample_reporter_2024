@@ -148,7 +148,6 @@ const styles = StyleSheet.create({
         width: "100%",
         borderRadius: 8,
         textAlignVertical: "top",
-        backgroundColor: "white",
         flex: 1,
         fontSize: 16,
         backgroundColor: tileColor,

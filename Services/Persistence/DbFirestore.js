@@ -1,8 +1,7 @@
 import { getFirebaseApp } from "../../firebaseConfig";
 import { addDoc, collection, deleteDoc, getDocs, getFirestore, query, where, updateDoc, doc } from "@firebase/firestore";
-import { signOut } from "../Auth/notesAuth";
-
-import { userInfo } from "../Auth/notesAuth"
+import { getCurrentDate, getCurrentTime } from "../../Utils/date"
+import Auth from "../Auth/notesAuth"
 
 const app = getFirebaseApp()
 const db = getFirestore(app)
@@ -16,9 +15,6 @@ async function getDocument(id,collectionId) {
 
 export default {
     collectionId: "",
-    async clear() {
-        return true
-    },
     getAll(predicate) {
         if(!predicate)
             return data
@@ -29,32 +25,29 @@ export default {
             await signOut()
     },
     async fetchData() {
-        const user = userInfo()
+        const user = Auth.userInfo()
         const colRef = collection(db, this.collectionId)
         const q = query(colRef, where("userId", "==", user.uid))
         const docsRef = await getDocs(q)
         const fetched = []
         docsRef.forEach(doc => {
-            const sample = doc.data()
-            sample.id = doc.id
-            fetched.push(sample)
+            const dbObject = doc.data()
+            dbObject.id = doc.id
+            fetched.push(dbObject)
         })
         return fetched
     },
-    async removeObject(sample) {
-        const doc = await getDocument(sample.id,this.collectionId)
+    async removeObject(id) {
+        const doc = await getDocument(id,this.collectionId)
         await deleteDoc(doc.ref)
     },
     async save(dbObject) {
-        const colRef = collection(db, this.collectionId)
-        let result = true
-        await addDoc(colRef, dbObject)
-        return result
+        dbObject.date = getCurrentDate()
+        dbObject.time = getCurrentTime()
+        dbObject.userId = Auth.userInfo()
+        await addDoc(collection(db, this.collectionId), dbObject)
     },
      async update(id,dbObject){
-        const colRef = collection(db, this.collectionId)
-        const docRef = doc(colRef, id)
-        await updateDoc(docRef,dbObject)
-        return true
+        await updateDoc(doc(collection(db, this.collectionId), id),dbObject)
      }
 }

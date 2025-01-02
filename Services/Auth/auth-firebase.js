@@ -19,41 +19,38 @@ function handleStateChange(user){
         obs(false)
 }
 
-export function init() {
-    if (!auth) {
-        auth = initializeAuth(app, {
-            persistence: getReactNativePersistence(ReactNativeAsyncStorage)
-        })
+export default{
+    init() {
+        if (!auth) {
+            auth = initializeAuth(app, {
+                persistence: getReactNativePersistence(ReactNativeAsyncStorage)
+            })
+        }
+    },
+    onSignedInChanged(observer) {
+        if (!auth)
+            throw "Auth not initialized!"
+        obs = observer
+        auth.onAuthStateChanged(handleStateChange)
+    },
+    async signIn(email, password, onSuccess, onError) {
+        const user = await signInWithEmailAndPassword(auth, email, password)
+            .catch(onError)
+        onSuccess(user)
+    },
+    async signOut() {
+        await SignOut(auth)
+    },
+    
+    async signUp(email, password, onSuccess, onError) {
+        const user = await createUserWithEmailAndPassword(auth, email, password)
+            .catch(onError)
+        onSuccess(user)
+    },
+    signedIn(){
+        return userInfo !== undefined
+    },
+    getUser(){
+        return JSON.parse(JSON.stringify(userInfo))
     }
-}
-
-export function onSignedInChanged(observer) {
-    if (!auth)
-        throw "Auth not initialized!"
-    obs = observer
-    auth.onAuthStateChanged(handleStateChange)
-}
-
-export async function signIn(email, password, onSuccess, onError) {
-    const user = await signInWithEmailAndPassword(auth, email, password)
-        .catch(onError)
-    onSuccess(user)
-}
-
-export async function signOut() {
-    await SignOut(auth)
-}
-
-export async function signUp(email, password, onSuccess, onError) {
-    const user = await createUserWithEmailAndPassword(auth, email, password)
-        .catch(onError)
-    onSuccess(user)
-}
-
-export function signedIn(){
-    return userInfo !== undefined
-}
-
-export function getUser(){
-    return JSON.parse(JSON.stringify(userInfo))
 }
