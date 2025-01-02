@@ -1,7 +1,7 @@
 import { StyleSheet, View, Text, TextInput, Button } from "react-native";
 import { useState } from "react";
 import LoadPage from "./LoadPage";
-import {signIn } from "../Services/Auth/notesAuth.js";
+import Auth from "../Services/Auth/notesAuth.js";
 import {authUsername, authPassword} from "../env/authEnv.js"
 
 export default function LoginPage({ navigation }) {
@@ -21,19 +21,14 @@ export default function LoginPage({ navigation }) {
             return
         setLoading(true)
 
-        function onSuccess(user) {
-            setLoading(false)
-        }
-
         function onError(){
-            // Handle error
             setTimeout(() => {
                 setLoading(false)
                 setErrorText("Wrong credentials!")
             }, 1500);
         }
 
-        signIn(username, password, onSuccess, onError)
+        Auth.signIn(username, password, () => setLoading(false), onError)
     }
 
     if (loading)

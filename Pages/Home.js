@@ -1,5 +1,5 @@
 import { StyleSheet, View } from "react-native";
-import { signOut } from "../Services/Auth/auth-firebase";
+import Auth from "../Services/Auth/auth-firebase";
 import IconTile from "../Components/Controls/IconTile";
 import { useState } from "react";
 import LoadPage from "./LoadPage";
@@ -44,7 +44,7 @@ export default function HomePage({ navigation }) {
                 </View>
                 <View style={styles.collout}>
                     <IconTile title={"Samples"} imageUrl={listLogoUri} pressHandler={() => navigation.navigate("Samples list")} />
-                    <IconTile title={"Log ud"} imageUrl={signOutLogoUri} pressHandler={signOut} />
+                    <IconTile title={"Log ud"} imageUrl={signOutLogoUri} pressHandler={() => Auth.signOut()} />
                 </View>
                 <IconTile title={"Sync"} imageUrl={syncLogoUri} pressHandler={handleFetchRequest} />
             </View>
