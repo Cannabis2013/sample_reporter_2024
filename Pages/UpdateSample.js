@@ -37,8 +37,8 @@ export default function UpdateSample({ navigation, route }) {
         setLoading(true)
         await Storage.removeObjects(scrappedSaved)
         const images = await Storage.uploadObjects(capturedImages)
-        const all = [...sampleImages,...images]
-        if (await Samples.update(sample.id,createSample(all)))
+        const all = [...sampleImages, ...images]
+        if (await Samples.update(sample.id, createSample(all)))
             navigation.goBack()
         setLoading(false)
     }
@@ -66,17 +66,17 @@ export default function UpdateSample({ navigation, route }) {
     function scrapSaved(saved) {
         const imageId = sampleImages.find(img => img.url == saved)?.id ?? ""
         sampleImages = sampleImages.filter(img => img.id != imageId.id)
-        setScrappedSaved([...scrapSaved,imageId])
+        setScrappedSaved([...scrapSaved, imageId])
     }
 
     function scrapCaptured(captured) {
-        capturedImages = captureImage.filter(cap => cap != captured)
-        setCapturedImages(capturedImages)
+        const filtered = capturedImages.filter(cap => cap != captured)
+        setCapturedImages(filtered)
     }
 
     function updateNote(text) {
         setNote(text.length <= limit ? text : note)
-        setCount(text.length) 
+        setCount(text.length)
     }
 
     if (loading)
